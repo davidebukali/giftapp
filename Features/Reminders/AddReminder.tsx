@@ -26,11 +26,11 @@ const AddReminder = () => {
       <View style={styles.container}>
         <Pressable onPress={pickImage}>
           {image ? (
-            <Image source={{ uri: image }} style={styles.image} />
+            <Image source={{ uri: image }} style={styles.galleryimage} />
           ) : (
             <Image
               source={require('../../assets/placeholder.png')}
-              style={styles.image}
+              style={styles.defaultimage}
             />
           )}
         </Pressable>
@@ -69,12 +69,16 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 10,
   },
-  image: {
-    height: 300,
+  defaultimage: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    width: 300,
     marginBottom: 10,
+  },
+  galleryimage: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    height: 300,
+    width: 300,
   },
 });
 

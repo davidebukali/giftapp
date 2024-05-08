@@ -6,11 +6,16 @@ import {
   View,
   ScrollView,
 } from 'react-native';
-import { List } from 'react-native-paper';
+import { FAB, List } from 'react-native-paper';
 
-const RemindersList = ({ nav }) => {
+const RemindersList = ({ navigation }) => {
+  const navigateToAddReminder = () => {
+    // navigation.navigate('Root', { screen: 'AddReminder' });
+    navigation.navigate('AddReminder');
+  };
+
   return (
-    <>
+    <View style={styles.scrollViewContainer}>
       <ScrollView style={styles.container}>
         <List.Section style={styles.listSection}>
           <List.Subheader>Reminders</List.Subheader>
@@ -36,331 +41,20 @@ const RemindersList = ({ nav }) => {
             titleStyle={styles.listTitle}
             onPress={() => {
               console.log('You tapped the button!');
-              nav.navigate('AddReminder');
+              navigation.navigate('ViewReminder');
             }}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
-          />
-          <List.Item
-            title="Birthday"
-            description={() => {
-              return (
-                <View>
-                  <Text style={styles.listDescription}>
-                    Tracy Kirabo on 31st May
-                  </Text>
-                  <Text style={styles.listSubDescription}>2 weeks to go</Text>
-                </View>
-              );
-            }}
-            left={() => (
-              <Image
-                style={styles.listImage}
-                source={require('../../assets/placeholder.png')}
-              />
-            )}
-            contentStyle={{ padding: 0, margin: 0, top: 0 }}
-            titleStyle={styles.listTitle}
           />
         </List.Section>
       </ScrollView>
-    </>
+      <FAB icon="plus" style={styles.fab} onPress={navigateToAddReminder} />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollViewContainer: {
+    height: 800,
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -372,10 +66,17 @@ const styles = StyleSheet.create({
   listDescription: { fontSize: 15 },
   listSubDescription: { fontSize: 14, fontStyle: 'italic', marginTop: 5 },
   listImage: {
-    width: 100,
-    height: 100,
     borderWidth: 1,
     borderColor: 'thistle',
+  },
+  // fabContainer: {
+  //   paddingBottom: 40,
+  // },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 50,
   },
 });
 
