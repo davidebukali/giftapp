@@ -5,12 +5,37 @@ import AddReminder from '../Reminders/AddReminder';
 import ViewReminder from '../Reminders/ViewReminder';
 import GiftCategory from '../Gift/GiftCategory';
 import GiftList from '../Gift/GiftList';
+import ViewGift from '../Gift/ViewGift';
+import { Badge, Button, IconButton, MD3Colors } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Cart from '../Orders/Cart';
 
 const Stack = createStackNavigator();
 
 const StackNavigation = () => {
+  const navigation = useNavigation();
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerRight: () => (
+          <View>
+            <Badge visible={true} style={styles.badge}>
+              3
+            </Badge>
+            <IconButton
+              mode="outlined"
+              icon="cart"
+              iconColor={MD3Colors.secondary50}
+              size={25}
+              onPress={() => {
+                navigation.navigate('Cart');
+              }}
+            />
+          </View>
+        ),
+      }}
+    >
       <Stack.Screen
         name="Root"
         component={DrawerNavigation}
@@ -18,10 +43,21 @@ const StackNavigation = () => {
       />
       <Stack.Screen name="AddReminder" component={AddReminder} />
       <Stack.Screen name="ViewReminder" component={ViewReminder} />
+
       <Stack.Screen name="GiftCategory" component={GiftCategory} />
       <Stack.Screen name="GiftList" component={GiftList} />
+      <Stack.Screen name="ViewGift" component={ViewGift} />
+      <Stack.Screen name="Cart" component={Cart} />
     </Stack.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  badge: {
+    top: 10,
+    position: 'absolute',
+    right: 45,
+  },
+});
 
 export default StackNavigation;
