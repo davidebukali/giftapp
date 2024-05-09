@@ -62,6 +62,17 @@ const Cart = ({ navigation }) => {
           <Text style={styles.summaryTextRight}>Lemontear</Text>
         </View>
       </View>
+      <View style={styles.outerContainer}>
+        <Button
+          mode="contained"
+          style={styles.buyGift}
+          onPress={() => {
+            navigation.navigate('ViewOrder');
+          }}
+        >
+          Order
+        </Button>
+      </View>
     </ScrollView>
   );
 };
@@ -97,6 +108,15 @@ const styles = StyleSheet.create({
   },
   summaryTextRight: {
     marginLeft: 180,
+  },
+  buyGift: {
+    padding: 10,
+    margin: 10,
+  },
+  outerContainer: {
+    backgroundColor: 'transparent',
+    width: '100%',
+    padding: 5,
   },
 });
 

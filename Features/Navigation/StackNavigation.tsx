@@ -10,6 +10,7 @@ import { Badge, Button, IconButton, MD3Colors } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Cart from '../Orders/Cart';
+import ViewOrder from '../Orders/ViewOrder';
 
 const Stack = createStackNavigator();
 
@@ -47,7 +48,9 @@ const StackNavigation = () => {
       <Stack.Screen name="GiftCategory" component={GiftCategory} />
       <Stack.Screen name="GiftList" component={GiftList} />
       <Stack.Screen name="ViewGift" component={ViewGift} />
+
       <Stack.Screen name="Cart" component={Cart} />
+      <Stack.Screen name="ViewOrder" component={ViewOrder} />
     </Stack.Navigator>
   );
 };
