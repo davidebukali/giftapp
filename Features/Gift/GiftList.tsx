@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import uuid from 'react-native-uuid';
 import { Searchbar } from 'react-native-paper';
 
 const { width } = Dimensions.get('window');
-const GiftList = () => {
+const GiftList = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   return (
     <View style={{ width: width }}>
@@ -15,14 +22,16 @@ const GiftList = () => {
         style={styles.search}
       />
       <View style={[styles.container, { width: width }]}>
-        <View style={styles.item}>
-          <Image
-            source={require('../../assets/placeholder.png')}
-            style={styles.image}
-          />
-          <Text style={styles.giftname}>{'Red velvet'}</Text>
-          <Text style={styles.giftprice}>{'100,000/='}</Text>
-        </View>
+        <Pressable onPress={() => navigation.navigate('ViewGift')}>
+          <View style={styles.item}>
+            <Image
+              source={require('../../assets/placeholder.png')}
+              style={styles.image}
+            />
+            <Text style={styles.giftname}>{'Red velvet'}</Text>
+            <Text style={styles.giftprice}>{'100,000/='}</Text>
+          </View>
+        </Pressable>
         <View style={styles.item}>
           <Image
             source={require('../../assets/placeholder.png')}

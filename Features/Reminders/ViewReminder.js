@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View, Pressable } from 'react-native';
-import { Button, List } from 'react-native-paper';
+import { Button, Chip } from 'react-native-paper';
 
 const ViewReminder = ({ navigation }) => {
   return (
@@ -20,9 +20,17 @@ const ViewReminder = ({ navigation }) => {
         >
           0772001098
         </Text>
-        <Text mode="outlined" label="Date" style={styles.textEvent}>
-          Birthday
-        </Text>
+        <View>
+          <Chip
+            type="flat"
+            icon="information"
+            compact={true}
+            style={styles.textEvent}
+            onPress={() => console.log('Pressed')}
+          >
+            Birthday
+          </Chip>
+        </View>
         <Text
           mode="outlined"
           inputMode="numeric"
@@ -63,7 +71,8 @@ const styles = StyleSheet.create({
   },
   textEvent: {
     fontSize: 15,
-    paddingBottom: 10,
+    marginBottom: 10,
+    width: '50%',
   },
   textDue: {
     fontSize: 15,

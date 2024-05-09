@@ -10,7 +10,6 @@ import { FAB, List } from 'react-native-paper';
 
 const RemindersList = ({ navigation }) => {
   const navigateToAddReminder = () => {
-    // navigation.navigate('Root', { screen: 'AddReminder' });
     navigation.navigate('AddReminder');
   };
 
