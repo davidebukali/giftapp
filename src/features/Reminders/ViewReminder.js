@@ -6,7 +6,7 @@ const ViewReminder = ({ navigation }) => {
     <>
       <View style={styles.container}>
         <Image
-          source={require('../../assets/placeholder.png')}
+          source={require('../../../assets/placeholder.png')}
           style={styles.image}
         />
         <Text mode="outlined" label="Names" style={styles.textName}>

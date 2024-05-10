@@ -29,7 +29,7 @@ const AddReminder = () => {
             <Image source={{ uri: image }} style={styles.galleryimage} />
           ) : (
             <Image
-              source={require('../../assets/placeholder.png')}
+              source={require('../../../assets/placeholder.png')}
               style={styles.defaultimage}
             />
           )}

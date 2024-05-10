@@ -23,7 +23,7 @@ const ViewGift = ({ navigation }) => {
       <View style={[styles.container, { width: width }]}>
         <Pressable onPress={() => console.log('Pressed')}>
           <Image
-            source={require('../../assets/placeholder.png')}
+            source={require('../../../assets/placeholder.png')}
             style={styles.defaultGalleryImage}
           />
         </Pressable>

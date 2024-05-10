@@ -25,7 +25,7 @@ const GiftList = ({ navigation }) => {
         <Pressable onPress={() => navigation.navigate('ViewGift')}>
           <View style={styles.item}>
             <Image
-              source={require('../../assets/placeholder.png')}
+              source={require('../../../assets/placeholder.png')}
               style={styles.image}
             />
             <Text style={styles.giftname}>{'Red velvet'}</Text>
@@ -34,7 +34,7 @@ const GiftList = ({ navigation }) => {
         </Pressable>
         <View style={styles.item}>
           <Image
-            source={require('../../assets/placeholder.png')}
+            source={require('../../../assets/placeholder.png')}
             style={styles.image}
           />
           <Text style={styles.giftname}>{'Black forest'}</Text>
@@ -42,7 +42,7 @@ const GiftList = ({ navigation }) => {
         </View>
         <View style={styles.item}>
           <Image
-            source={require('../../assets/placeholder.png')}
+            source={require('../../../assets/placeholder.png')}
             style={styles.image}
           />
           <Text style={styles.giftname}>{'Strawberry Muffins'}</Text>
@@ -50,7 +50,7 @@ const GiftList = ({ navigation }) => {
         </View>
         <View style={styles.item}>
           <Image
-            source={require('../../assets/placeholder.png')}
+            source={require('../../../assets/placeholder.png')}
             style={styles.image}
           />
           <Text style={styles.giftname}>{'Fruit cakes'}</Text>
@@ -58,7 +58,7 @@ const GiftList = ({ navigation }) => {
         </View>
         <View style={styles.item}>
           <Image
-            source={require('../../assets/placeholder.png')}
+            source={require('../../../assets/placeholder.png')}
             style={styles.image}
           />
           <Text style={styles.giftname}>{'Cake loaf'}</Text>

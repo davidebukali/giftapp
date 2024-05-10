@@ -15,7 +15,7 @@ const GiftCategory = ({ navigation }) => {
       <Pressable onPress={() => navigation.navigate('GiftList')}>
         <View style={styles.item}>
           <Image
-            source={require('../../assets/placeholder.png')}
+            source={require('../../../assets/placeholder.png')}
             style={styles.image}
           />
           <Text style={styles.text}>{'Cakes'}</Text>
@@ -23,28 +23,28 @@ const GiftCategory = ({ navigation }) => {
       </Pressable>
       <View style={styles.item}>
         <Image
-          source={require('../../assets/placeholder.png')}
+          source={require('../../../assets/placeholder.png')}
           style={styles.image}
         />
         <Text style={styles.text}>{'Flowers'}</Text>
       </View>
       <View style={styles.item}>
         <Image
-          source={require('../../assets/placeholder.png')}
+          source={require('../../../assets/placeholder.png')}
           style={styles.image}
         />
         <Text style={styles.text}>{'Chocolates'}</Text>
       </View>
       <View style={styles.item}>
         <Image
-          source={require('../../assets/placeholder.png')}
+          source={require('../../../assets/placeholder.png')}
           style={styles.image}
         />
         <Text style={styles.text}>{'Hampers'}</Text>
       </View>
       <View style={styles.lastItem}>
         <Image
-          source={require('../../assets/placeholder.png')}
+          source={require('../../../assets/placeholder.png')}
           style={styles.image}
         />
         <Text style={styles.text}>{'Custom'}</Text>
