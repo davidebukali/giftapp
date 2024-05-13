@@ -7,18 +7,13 @@ import {
   ScrollView,
 } from 'react-native';
 import { FAB, List } from 'react-native-paper';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import type { RootState } from '../../app/store';
 import { add } from './reminderSlice';
+import { format, formatDistance } from 'date-fns';
 
 const RemindersList = ({ navigation }) => {
   const reminders = useSelector((state: RootState) => state.reminder);
-  const dispatch = useDispatch();
-  const navigateToAddReminder = () => {
-    navigation.navigate('AddReminder');
-  };
-
-  console.log('hello ', reminders);
 
   const renderReminders = () => {
     return reminders.map((reminder) => {
@@ -30,22 +25,32 @@ const RemindersList = ({ navigation }) => {
             return (
               <View>
                 <Text style={styles.listDescription}>
-                  {reminder.names} on the {reminder.date}
+                  {reminder.names} on {format(new Date(reminder.date), 'PPPP')}
                 </Text>
-                <Text style={styles.listSubDescription}>2 weeks to go</Text>
+                <Text style={styles.listSubDescription}>
+                  {formatDistance(new Date(reminder.date), new Date(), {
+                    addSuffix: true,
+                  })}
+                </Text>
               </View>
             );
           }}
-          left={() => (
-            <Image
-              style={styles.listImage}
-              source={require('../../../assets/placeholder.png')}
-            />
-          )}
+          left={() => {
+            return reminder.image ? (
+              <Image
+                source={{ uri: reminder.image }}
+                style={styles.listImage}
+              />
+            ) : (
+              <Image
+                style={styles.listImage}
+                source={require('../../../assets/placeholder.png')}
+              />
+            );
+          }}
           contentStyle={{ padding: 0, margin: 0, top: 0 }}
           titleStyle={styles.listTitle}
           onPress={() => {
-            console.log('You tapped the button!');
             navigation.navigate('ViewReminder');
           }}
         />
@@ -61,7 +66,13 @@ const RemindersList = ({ navigation }) => {
           {renderReminders()}
         </List.Section>
       </ScrollView>
-      <FAB icon="plus" style={styles.fab} onPress={navigateToAddReminder} />
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        onPress={() => {
+          navigation.navigate('AddReminder');
+        }}
+      />
     </View>
   );
 };

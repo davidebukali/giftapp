@@ -6,7 +6,7 @@ export interface ReminderState {
   id: string;
   names: string;
   date: string;
-  phone?: number | null;
+  phone?: string | null;
   image: string;
   eventtype: string;
 }
@@ -15,9 +15,9 @@ const initialState: ReminderState[] = [
   {
     id: '1',
     names: 'Tracy Kirabo',
-    date: '31st May',
+    date: '2024-05-17T00:30:00.000Z',
     phone: null,
-    image: '../../../assets/images/placeholder.png',
+    image: '',
     eventtype: 'Birthday',
   },
 ];
