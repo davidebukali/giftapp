@@ -8,8 +8,15 @@ import uuid from 'react-native-uuid';
 import { Formik } from 'formik';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
+import * as Yup from 'yup';
+import { useNavigation } from '@react-navigation/native';
 
 type ModeType = 'date' | 'time';
+
+const AddReminderSchema = Yup.object().shape({
+  names: Yup.string().required('Required'),
+  remindertype: Yup.string().required('Required'),
+});
 
 const AddReminder = () => {
   const [image, setImage] = useState('');
@@ -17,6 +24,7 @@ const AddReminder = () => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState<ModeType>('date');
+  const navigation = useNavigation();
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -46,6 +54,7 @@ const AddReminder = () => {
   return (
     <Formik
       initialValues={{ names: '', remindertype: '', phone: '' }}
+      validationSchema={AddReminderSchema}
       onSubmit={({ names, remindertype, phone }) => {
         dispatch(
           add({
@@ -57,9 +66,10 @@ const AddReminder = () => {
             eventtype: remindertype,
           }),
         );
+        navigation.navigate('Home');
       }}
     >
-      {({ handleChange, handleBlur, handleSubmit, values }) => (
+      {({ handleChange, handleBlur, handleSubmit, errors, touched }) => (
         <View style={styles.container}>
           <Pressable onPress={pickImage}>
             {image ? (
@@ -78,6 +88,7 @@ const AddReminder = () => {
             style={styles.input}
             onChangeText={handleChange('names')}
             onBlur={handleBlur('names')}
+            error={!!errors.names}
           />
           <View
             style={[
@@ -134,6 +145,7 @@ const AddReminder = () => {
             style={styles.input}
             onChangeText={handleChange('remindertype')}
             onBlur={handleBlur('remindertype')}
+            error={!!errors.remindertype}
           />
           <TextInput
             mode="outlined"
