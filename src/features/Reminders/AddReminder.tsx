@@ -10,6 +10,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import * as Yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
+import * as FileSystem from 'expo-file-system';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type ModeType = 'date' | 'time';
 
@@ -36,7 +38,7 @@ const AddReminder = () => {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      saveBase64Image(result.assets[0].uri);
     }
   };
 
@@ -51,117 +53,126 @@ const AddReminder = () => {
     setMode(modeValue);
   };
 
+  const saveBase64Image = async (imageUri: string) => {
+    let getInfo = await FileSystem.getInfoAsync(imageUri);
+    let options = { encoding: FileSystem.EncodingType.Base64 };
+    let base64 = await FileSystem.readAsStringAsync(imageUri, options);
+    setImage('data:image/jpeg;base64,' + base64);
+  };
+
   return (
-    <Formik
-      initialValues={{ names: '', remindertype: '', phone: '' }}
-      validationSchema={AddReminderSchema}
-      onSubmit={({ names, remindertype, phone }) => {
-        dispatch(
-          add({
-            id: uuid.v4() as string,
-            names,
-            date: date.toString(),
-            phone,
-            image: image ? image : '',
-            eventtype: remindertype,
-          }),
-        );
-        navigation.navigate('Home');
-      }}
-    >
-      {({ handleChange, handleBlur, handleSubmit, errors, touched }) => (
-        <View style={styles.container}>
-          <Pressable onPress={pickImage}>
-            {image ? (
-              <Image source={{ uri: image }} style={styles.galleryimage} />
-            ) : (
-              <Image
-                source={require('../../../assets/placeholder.png')}
-                style={styles.defaultimage}
+    <ScrollView>
+      <Formik
+        initialValues={{ names: '', remindertype: '', phone: '' }}
+        validationSchema={AddReminderSchema}
+        onSubmit={({ names, remindertype, phone }) => {
+          dispatch(
+            add({
+              id: uuid.v4() as string,
+              names,
+              date: date.toString(),
+              phone,
+              image: image ? image : '',
+              eventtype: remindertype,
+            }),
+          );
+          navigation.navigate('Home');
+        }}
+      >
+        {({ handleChange, handleBlur, handleSubmit, errors, touched }) => (
+          <View style={styles.container}>
+            <Pressable onPress={pickImage}>
+              {image ? (
+                <Image source={{ uri: image }} style={styles.galleryimage} />
+              ) : (
+                <Image
+                  source={require('../../../assets/placeholder.png')}
+                  style={styles.defaultimage}
+                />
+              )}
+            </Pressable>
+            <TextInput
+              mode="outlined"
+              label="Names"
+              placeholder="Who is the gift for ?"
+              style={styles.input}
+              onChangeText={handleChange('names')}
+              onBlur={handleBlur('names')}
+              error={!!errors.names}
+            />
+            <View
+              style={[
+                {
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                },
+              ]}
+            >
+              <Button
+                icon="calendar"
+                mode="outlined"
+                onPress={() => toggleDatetimePicker('date')}
+                style={styles.datebtn}
+              >
+                Set Date
+              </Button>
+              <Text style={styles.datetext}>{format(date, 'PPPP')}</Text>
+            </View>
+            <View
+              style={[
+                {
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 10,
+                  marginBottom: 5,
+                },
+              ]}
+            >
+              <Button
+                icon="clock"
+                mode="outlined"
+                onPress={() => toggleDatetimePicker('time')}
+                style={styles.datebtn}
+              >
+                Set Time
+              </Button>
+              <Text style={styles.datetext}>{format(date, 'p')}</Text>
+            </View>
+            {show && (
+              <DateTimePicker
+                mode={mode}
+                value={date}
+                is24Hour={true}
+                onChange={handleDateChange}
               />
             )}
-          </Pressable>
-          <TextInput
-            mode="outlined"
-            label="Names"
-            placeholder="Who is the gift for ?"
-            style={styles.input}
-            onChangeText={handleChange('names')}
-            onBlur={handleBlur('names')}
-            error={!!errors.names}
-          />
-          <View
-            style={[
-              {
-                width: '100%',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              },
-            ]}
-          >
-            <Button
-              icon="calendar"
+            <TextInput
               mode="outlined"
-              onPress={() => toggleDatetimePicker('date')}
-              style={styles.datebtn}
-            >
-              Set Date
-            </Button>
-            <Text style={styles.datetext}>{format(date, 'PPPP')}</Text>
-          </View>
-          <View
-            style={[
-              {
-                width: '100%',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: 10,
-                marginBottom: 5,
-              },
-            ]}
-          >
-            <Button
-              icon="clock"
-              mode="outlined"
-              onPress={() => toggleDatetimePicker('time')}
-              style={styles.datebtn}
-            >
-              Set Time
-            </Button>
-            <Text style={styles.datetext}>{format(date, 'p')}</Text>
-          </View>
-          {show && (
-            <DateTimePicker
-              mode={mode}
-              value={date}
-              is24Hour={true}
-              onChange={handleDateChange}
+              label="Type of reminder"
+              placeholder="Could be a Birthday, Anniversary or Baptism"
+              style={styles.input}
+              onChangeText={handleChange('remindertype')}
+              onBlur={handleBlur('remindertype')}
+              error={!!errors.remindertype}
             />
-          )}
-          <TextInput
-            mode="outlined"
-            label="Type of reminder"
-            placeholder="Could be a Birthday, Anniversary or Baptism"
-            style={styles.input}
-            onChangeText={handleChange('remindertype')}
-            onBlur={handleBlur('remindertype')}
-            error={!!errors.remindertype}
-          />
-          <TextInput
-            mode="outlined"
-            inputMode="numeric"
-            label="Phone"
-            placeholder="Phone number "
-            style={styles.input}
-            onChangeText={handleChange('phone')}
-            onBlur={handleBlur('phone')}
-          />
-          <Button mode="contained" onPress={handleSubmit}>
-            Save
-          </Button>
-        </View>
-      )}
-    </Formik>
+            <TextInput
+              mode="outlined"
+              inputMode="numeric"
+              label="Phone"
+              placeholder="Phone number "
+              style={styles.input}
+              onChangeText={handleChange('phone')}
+              onBlur={handleBlur('phone')}
+            />
+            <Button mode="contained" onPress={handleSubmit}>
+              Save
+            </Button>
+          </View>
+        )}
+      </Formik>
+    </ScrollView>
   );
 };
 

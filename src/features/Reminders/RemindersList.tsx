@@ -1,21 +1,21 @@
 import {
-  Button,
   Image,
   StyleSheet,
   Text,
   View,
   ScrollView,
+  ImageSourcePropType,
 } from 'react-native';
 import { FAB, List } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../app/store';
-import { add } from './reminderSlice';
 import { format, formatDistance } from 'date-fns';
 
 const RemindersList = ({ navigation }) => {
   const reminders = useSelector((state: RootState) => state.reminder);
 
   const renderReminders = () => {
+    console.log(JSON.stringify(reminders, undefined, 4));
     return reminders.map((reminder) => {
       return (
         <List.Item
@@ -36,16 +36,18 @@ const RemindersList = ({ navigation }) => {
             );
           }}
           left={() => {
-            return reminder.image ? (
-              <Image
-                source={{ uri: reminder.image }}
-                style={styles.listImage}
-              />
-            ) : (
-              <Image
-                style={styles.listImage}
-                source={require('../../../assets/placeholder.png')}
-              />
+            return (
+              (reminder.image && (
+                <Image
+                  source={{ uri: reminder.image }}
+                  style={styles.listImage}
+                />
+              )) || (
+                <Image
+                  style={styles.listImage}
+                  source={require('../../../assets/placeholder.png')}
+                />
+              )
             );
           }}
           contentStyle={{ padding: 0, margin: 0, top: 0 }}
@@ -94,6 +96,7 @@ const styles = StyleSheet.create({
   listImage: {
     borderWidth: 1,
     borderColor: 'thistle',
+    width: '40%',
   },
   // fabContainer: {
   //   paddingBottom: 40,

@@ -35,6 +35,14 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow Gift App to access your photos.",
+          "savePhotosPermission": "Allow Gift App to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
       ]
     ]
   }
