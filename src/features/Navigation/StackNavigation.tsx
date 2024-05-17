@@ -16,27 +16,27 @@ const Stack = createStackNavigator();
 
 const StackNavigation = () => {
   const navigation = useNavigation();
+  const cartButton = {
+    headerRight: () => (
+      <View>
+        <Badge visible={true} style={styles.badge}>
+          3
+        </Badge>
+        <IconButton
+          mode="outlined"
+          icon="cart"
+          iconColor={MD3Colors.secondary50}
+          size={25}
+          onPress={() => {
+            navigation.navigate('Cart');
+          }}
+        />
+      </View>
+    ),
+  };
+
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerRight: () => (
-          <View>
-            <Badge visible={true} style={styles.badge}>
-              3
-            </Badge>
-            <IconButton
-              mode="outlined"
-              icon="cart"
-              iconColor={MD3Colors.secondary50}
-              size={25}
-              onPress={() => {
-                navigation.navigate('Cart');
-              }}
-            />
-          </View>
-        ),
-      }}
-    >
+    <Stack.Navigator>
       <Stack.Screen
         name="Root"
         component={DrawerNavigation}
@@ -45,9 +45,13 @@ const StackNavigation = () => {
       <Stack.Screen name="AddReminder" component={AddReminder} />
       <Stack.Screen name="ViewReminder" component={ViewReminder} />
 
-      <Stack.Screen name="GiftCategory" component={GiftCategory} />
-      <Stack.Screen name="GiftList" component={GiftList} />
-      <Stack.Screen name="ViewGift" component={ViewGift} />
+      <Stack.Screen
+        name="GiftCategory"
+        component={GiftCategory}
+        options={cartButton}
+      />
+      <Stack.Screen name="GiftList" component={GiftList} options={cartButton} />
+      <Stack.Screen name="ViewGift" component={ViewGift} options={cartButton} />
 
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="ViewOrder" component={ViewOrder} />
