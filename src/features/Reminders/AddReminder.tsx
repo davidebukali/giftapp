@@ -3,15 +3,16 @@ import { Button, TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { add } from './reminderSlice';
+import { add, update } from './reminderSlice';
 import uuid from 'react-native-uuid';
 import { Formik } from 'formik';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import * as Yup from 'yup';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import { ScrollView } from 'react-native-gesture-handler';
+import React from 'react';
 
 type ModeType = 'date' | 'time';
 
@@ -27,6 +28,23 @@ const AddReminder = () => {
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState<ModeType>('date');
   const navigation = useNavigation();
+  const { params } = useRoute();
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => (
+        <Text style={styles.header}>
+          {params?.action === 'edit' ? 'Edit Reminder' : 'Add Reminder'}
+        </Text>
+      ),
+    });
+  }, [navigation]);
+
+  React.useEffect(() => {
+    if (params?.image) {
+      setImage(params?.image);
+    }
+  }, [params?.image]);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -54,7 +72,6 @@ const AddReminder = () => {
   };
 
   const saveBase64Image = async (imageUri: string) => {
-    let getInfo = await FileSystem.getInfoAsync(imageUri);
     let options = { encoding: FileSystem.EncodingType.Base64 };
     let base64 = await FileSystem.readAsStringAsync(imageUri, options);
     setImage('data:image/jpeg;base64,' + base64);
@@ -63,23 +80,31 @@ const AddReminder = () => {
   return (
     <ScrollView>
       <Formik
-        initialValues={{ names: '', remindertype: '', phone: '' }}
+        initialValues={{
+          names: params?.names,
+          remindertype: params?.eventtype,
+          phone: params?.phone,
+        }}
         validationSchema={AddReminderSchema}
         onSubmit={({ names, remindertype, phone }) => {
-          dispatch(
-            add({
-              id: uuid.v4() as string,
-              names,
-              date: date.toString(),
-              phone,
-              image: image ? image : '',
-              eventtype: remindertype,
-            }),
-          );
+          const payload = {
+            names,
+            date: date.toString(),
+            phone,
+            image: image ? image : '',
+            eventtype: remindertype,
+          };
+
+          if (params?.action === 'edit') {
+            dispatch(update({ id: params?.id, ...payload }));
+          } else {
+            dispatch(add({ id: uuid.v4() as string, ...payload }));
+          }
+
           navigation.navigate('Home');
         }}
       >
-        {({ handleChange, handleBlur, handleSubmit, errors, touched }) => (
+        {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
           <View style={styles.container}>
             <Pressable onPress={pickImage}>
               {image ? (
@@ -98,6 +123,7 @@ const AddReminder = () => {
               style={styles.input}
               onChangeText={handleChange('names')}
               onBlur={handleBlur('names')}
+              value={values.names}
               error={!!errors.names}
             />
             <View
@@ -125,7 +151,6 @@ const AddReminder = () => {
                   width: '100%',
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  marginTop: 10,
                   marginBottom: 5,
                 },
               ]}
@@ -156,6 +181,7 @@ const AddReminder = () => {
               onChangeText={handleChange('remindertype')}
               onBlur={handleBlur('remindertype')}
               error={!!errors.remindertype}
+              value={values.remindertype}
             />
             <TextInput
               mode="outlined"
@@ -165,9 +191,14 @@ const AddReminder = () => {
               style={styles.input}
               onChangeText={handleChange('phone')}
               onBlur={handleBlur('phone')}
+              value={values.phone}
             />
-            <Button mode="contained" onPress={handleSubmit}>
-              Save
+            <Button
+              mode="contained"
+              onPress={handleSubmit}
+              style={styles.submitBtn}
+            >
+              {params?.action === 'edit' ? 'Edit' : 'Add'}
             </Button>
           </View>
         )}
@@ -199,12 +230,20 @@ const styles = StyleSheet.create({
   },
   datebtn: {
     width: '30%',
+    marginBottom: 10,
   },
   datetext: {
     marginTop: 10,
     marginLeft: 'auto',
     marginRight: 'auto',
     width: '50%',
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: '500',
+  },
+  submitBtn: {
+    padding: 5,
   },
 });
 

@@ -36,10 +36,16 @@ export const reminderSlice = createSlice({
         eventtype: action.payload.eventtype,
       });
     },
+    update: (state, action: PayloadAction<ReminderState>) => {
+      const index = state.findIndex((item) => item.id === action.payload.id);
+      state[index] = {
+        ...action.payload,
+      };
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { add } = reminderSlice.actions;
+export const { add, update } = reminderSlice.actions;
 
 export default reminderSlice.reducer;

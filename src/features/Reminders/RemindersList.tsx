@@ -1,11 +1,4 @@
-import {
-  Image,
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ImageSourcePropType,
-} from 'react-native';
+import { Image, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { FAB, List } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../app/store';
@@ -53,7 +46,10 @@ const RemindersList = ({ navigation }) => {
           contentStyle={{ padding: 0, margin: 0, top: 0 }}
           titleStyle={styles.listTitle}
           onPress={() => {
-            navigation.navigate('ViewReminder');
+            navigation.navigate('AddReminder', {
+              action: 'edit',
+              ...reminder,
+            });
           }}
         />
       );
@@ -72,7 +68,9 @@ const RemindersList = ({ navigation }) => {
         icon="plus"
         style={styles.fab}
         onPress={() => {
-          navigation.navigate('AddReminder');
+          navigation.navigate('AddReminder', {
+            action: 'add',
+          });
         }}
       />
     </View>
