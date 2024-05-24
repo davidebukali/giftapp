@@ -9,7 +9,7 @@ const RemindersList = ({ navigation }) => {
   const reminders = useSelector(selectReminders);
 
   const renderReminders = () => {
-    return reminders.map((reminder) => {
+    const reminderList = reminders.map((reminder) => {
       return (
         <List.Item
           key={reminder.id}
@@ -54,13 +54,18 @@ const RemindersList = ({ navigation }) => {
         />
       );
     });
+    if (reminderList.length > 0) {
+      return reminderList;
+    } else {
+      return <Text style={styles.emptyReminders}>Nothing here ...</Text>;
+    }
   };
 
   return (
     <View style={styles.scrollViewContainer}>
       <ScrollView style={styles.container}>
         <List.Section style={styles.listSection}>
-          <List.Subheader>Reminders</List.Subheader>
+          <List.Subheader>Your Reminders</List.Subheader>
           {renderReminders()}
         </List.Section>
       </ScrollView>
@@ -85,9 +90,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     width: '100%',
-    padding: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
-  listSection: { padding: 5, marginBottom: 5 },
+  listSection: { paddingLeft: 5, paddingRight: 5 },
   listTitle: { padding: 0, margin: 0, fontSize: 20, marginTop: 5 },
   listDescription: { fontSize: 15 },
   listSubDescription: { fontSize: 14, fontStyle: 'italic', marginTop: 5 },
@@ -96,14 +102,14 @@ const styles = StyleSheet.create({
     borderColor: 'thistle',
     width: '40%',
   },
-  // fabContainer: {
-  //   paddingBottom: 40,
-  // },
   fab: {
     position: 'absolute',
     margin: 16,
     right: 0,
     bottom: 50,
+  },
+  emptyReminders: {
+    textAlign: 'center',
   },
 });
 
