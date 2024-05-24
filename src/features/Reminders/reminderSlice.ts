@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import uuid from 'react-native-uuid';
+import { RootState } from '../../app/store';
 
 export interface ReminderState {
   id: string;
@@ -11,16 +12,11 @@ export interface ReminderState {
   eventtype: string;
 }
 
-const initialState: ReminderState[] = [
-  {
-    id: '1',
-    names: 'Tracy Kirabo',
-    date: '2024-05-17T00:30:00.000Z',
-    phone: null,
-    image: '',
-    eventtype: 'Birthday',
-  },
-];
+export interface ReminderId {
+  id: string;
+}
+
+const initialState: ReminderState[] = [];
 
 export const reminderSlice = createSlice({
   name: 'reminder',
@@ -42,10 +38,19 @@ export const reminderSlice = createSlice({
         ...action.payload,
       };
     },
+    remove: (state, action: PayloadAction<ReminderId>) => {
+      const index = state.findIndex((item) => item.id === action.payload.id);
+      if (index > -1) {
+        // only splice array when item is found
+        state.splice(index, 1); // 2nd parameter means remove one item only
+      }
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { add, update } = reminderSlice.actions;
+export const { add, remove, update } = reminderSlice.actions;
+
+export const selectReminders = (state: RootState) => state.reminder;
 
 export default reminderSlice.reducer;

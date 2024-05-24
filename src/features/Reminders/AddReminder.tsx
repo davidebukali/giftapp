@@ -3,7 +3,7 @@ import { Button, TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { add, update } from './reminderSlice';
+import { add, remove, update } from './reminderSlice';
 import uuid from 'react-native-uuid';
 import { Formik } from 'formik';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -22,13 +22,15 @@ const AddReminderSchema = Yup.object().shape({
 });
 
 const AddReminder = () => {
+  const { params } = useRoute();
   const [image, setImage] = useState('');
   const dispatch = useDispatch();
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(
+    params?.date ? new Date(params?.date) : new Date(),
+  );
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState<ModeType>('date');
   const navigation = useNavigation();
-  const { params } = useRoute();
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -78,7 +80,7 @@ const AddReminder = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.scrollContainer}>
       <Formik
         initialValues={{
           names: params?.names,
@@ -193,13 +195,38 @@ const AddReminder = () => {
               onBlur={handleBlur('phone')}
               value={values.phone}
             />
-            <Button
-              mode="contained"
-              onPress={handleSubmit}
-              style={styles.submitBtn}
-            >
-              {params?.action === 'edit' ? 'Edit' : 'Add'}
-            </Button>
+            {params?.action === 'edit' && (
+              <View style={styles.btnContainer}>
+                <Button
+                  mode="contained"
+                  onPress={handleSubmit}
+                  style={styles.editBtn}
+                  icon="pencil"
+                >
+                  Edit
+                </Button>
+                <Button
+                  mode="contained"
+                  onPress={() => {
+                    dispatch(remove({ id: params?.id }));
+                    navigation.navigate('Home');
+                  }}
+                  style={styles.deleteBtn}
+                  icon="delete"
+                >
+                  Delete
+                </Button>
+              </View>
+            )}
+            {params?.action === 'add' && (
+              <Button
+                mode="contained"
+                onPress={handleSubmit}
+                style={styles.submitBtn}
+              >
+                Add
+              </Button>
+            )}
           </View>
         )}
       </Formik>
@@ -208,6 +235,10 @@ const AddReminder = () => {
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    backgroundColor: '#fff',
+    width: '100%',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -242,7 +273,23 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '500',
   },
+  btnContainer: {
+    backgroundColor: '#fff',
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
   submitBtn: {
+    padding: 5,
+  },
+  editBtn: {
+    width: '45%',
+    margin: 5,
+    padding: 5,
+  },
+  deleteBtn: {
+    width: '45%',
+    margin: 5,
     padding: 5,
   },
 });

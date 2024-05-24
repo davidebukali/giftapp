@@ -3,12 +3,12 @@ import { FAB, List } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../app/store';
 import { format, formatDistance } from 'date-fns';
+import { selectReminders } from './reminderSlice';
 
 const RemindersList = ({ navigation }) => {
-  const reminders = useSelector((state: RootState) => state.reminder);
+  const reminders = useSelector(selectReminders);
 
   const renderReminders = () => {
-    console.log(JSON.stringify(reminders, undefined, 4));
     return reminders.map((reminder) => {
       return (
         <List.Item
