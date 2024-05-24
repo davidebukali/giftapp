@@ -188,8 +188,8 @@ const AddReminder = () => {
             <TextInput
               mode="outlined"
               inputMode="numeric"
-              label="Phone"
-              placeholder="Phone number "
+              label="Phone (Optional)"
+              placeholder="Contact for delivery"
               style={styles.input}
               onChangeText={handleChange('phone')}
               onBlur={handleBlur('phone')}
