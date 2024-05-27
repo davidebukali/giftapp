@@ -3,13 +3,19 @@ import { FAB, List } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../../app/store';
 import { format, formatDistance } from 'date-fns';
-import { selectReminders } from './reminderSlice';
+import { useGetRemindersQuery } from '../api/apiSlice';
 
 const RemindersList = ({ navigation }) => {
-  const reminders = useSelector(selectReminders);
+  const { data = [], error, isLoading, isFetching } = useGetRemindersQuery();
+  if (isLoading)
+    return (
+      <View style={styles.container}>
+        <Text style={styles.emptyReminders}>Loading...</Text>
+      </View>
+    );
 
   const renderReminders = () => {
-    const reminderList = reminders.map((reminder) => {
+    const reminderList = data?.map((reminder) => {
       return (
         <List.Item
           key={reminder.id}
@@ -54,7 +60,7 @@ const RemindersList = ({ navigation }) => {
         />
       );
     });
-    if (reminderList.length > 0) {
+    if (data && data.length > 0) {
       return reminderList;
     } else {
       return <Text style={styles.emptyReminders}>Nothing here ...</Text>;
@@ -65,7 +71,10 @@ const RemindersList = ({ navigation }) => {
     <View style={styles.scrollViewContainer}>
       <ScrollView style={styles.container}>
         <List.Section style={styles.listSection}>
-          <List.Subheader>Your Reminders</List.Subheader>
+          <List.Subheader>
+            Your Reminders{' '}
+            {isFetching ? <Text>Refetching...</Text> : <Text>''</Text>}
+          </List.Subheader>
           {renderReminders()}
         </List.Section>
       </ScrollView>
