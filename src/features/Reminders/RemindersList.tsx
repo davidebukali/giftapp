@@ -6,7 +6,13 @@ import { format, formatDistance } from 'date-fns';
 import { useGetRemindersQuery } from '../api/apiSlice';
 
 const RemindersList = ({ navigation }) => {
-  const { data = [], error, isLoading, isFetching } = useGetRemindersQuery();
+  const {
+    data = [],
+    error,
+    isLoading,
+    isFetching,
+    isSuccess,
+  } = useGetRemindersQuery();
   if (isLoading)
     return (
       <View style={styles.container}>
@@ -14,8 +20,9 @@ const RemindersList = ({ navigation }) => {
       </View>
     );
 
-  const renderReminders = () => {
-    const reminderList = data?.map((reminder) => {
+  let reminderList;
+  if (data && isSuccess) {
+    reminderList = data.map((reminder) => {
       return (
         <List.Item
           key={reminder.id}
@@ -60,22 +67,18 @@ const RemindersList = ({ navigation }) => {
         />
       );
     });
-    if (data && data.length > 0) {
-      return reminderList;
-    } else {
-      return <Text style={styles.emptyReminders}>Nothing here ...</Text>;
-    }
-  };
+  } else {
+    reminderList = <Text style={styles.emptyReminders}>Nothing here ...</Text>;
+  }
 
   return (
     <View style={styles.scrollViewContainer}>
       <ScrollView style={styles.container}>
         <List.Section style={styles.listSection}>
           <List.Subheader>
-            Your Reminders{' '}
-            {isFetching ? <Text>Refetching...</Text> : <Text>''</Text>}
+            Your Reminders {isFetching && <Text>Refetching...</Text>}
           </List.Subheader>
-          {renderReminders()}
+          {reminderList}
         </List.Section>
       </ScrollView>
       <FAB

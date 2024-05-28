@@ -13,6 +13,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import { ScrollView } from 'react-native-gesture-handler';
 import React from 'react';
+import { useAddReminderMutation } from '../api/apiSlice';
 
 type ModeType = 'date' | 'time';
 
@@ -30,6 +31,7 @@ const AddReminder = () => {
   );
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState<ModeType>('date');
+  const [addReminder] = useAddReminderMutation();
   const navigation = useNavigation();
 
   React.useEffect(() => {
@@ -91,7 +93,7 @@ const AddReminder = () => {
         onSubmit={({ names, remindertype, phone }) => {
           const payload = {
             names,
-            date: date.toString(),
+            date: format(new Date(date), 'yyyy-MM-dd HH:mm:ss'),
             phone,
             image: image ? image : '',
             eventtype: remindertype,
@@ -100,7 +102,11 @@ const AddReminder = () => {
           if (params?.action === 'edit') {
             dispatch(update({ id: params?.id, ...payload }));
           } else {
-            dispatch(add({ id: uuid.v4() as string, ...payload }));
+            try {
+              addReminder({ id: uuid.v4() as string, ...payload });
+            } catch (err) {
+              console.error('Failed to add a reminder', err);
+            }
           }
 
           navigation.navigate('Home');
