@@ -2,8 +2,6 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { add, remove, update } from './reminderSlice';
 import uuid from 'react-native-uuid';
 import { Formik } from 'formik';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -30,7 +28,6 @@ const AddReminderSchema = Yup.object().shape({
 const AddReminder = () => {
   const { params } = useRoute();
   const [image, setImage] = useState('');
-  const dispatch = useDispatch();
   const [date, setDate] = useState(
     params?.date ? new Date(params?.date) : new Date(),
   );
