@@ -12,7 +12,7 @@ Start Expo:
 npm start
 ```
 
-Run dev server
+Run dev server in another terminal:
 
 ```bash
 npx json-server ./db/db.json
