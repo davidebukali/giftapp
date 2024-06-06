@@ -14,6 +14,7 @@ import * as FileSystem from 'expo-file-system';
 import { ScrollView } from 'react-native-gesture-handler';
 import React from 'react';
 import { useAddReminderMutation } from '../api/apiSlice';
+import { DATETIME } from '../../utils/constants';
 
 type ModeType = 'date' | 'time';
 
@@ -93,7 +94,7 @@ const AddReminder = () => {
         onSubmit={({ names, remindertype, phone }) => {
           const payload = {
             names,
-            date: format(new Date(date), 'yyyy-MM-dd HH:mm:ss'),
+            date: format(new Date(date), DATETIME),
             phone,
             image: image ? image : '',
             eventtype: remindertype,
