@@ -21,7 +21,7 @@ const RemindersList = ({ navigation }) => {
     );
 
   let reminderList;
-  if (data && isSuccess) {
+  if (data.length && isSuccess) {
     reminderList = data.map((reminder) => {
       return (
         <List.Item
@@ -76,7 +76,8 @@ const RemindersList = ({ navigation }) => {
       <ScrollView style={styles.container}>
         <List.Section style={styles.listSection}>
           <List.Subheader>
-            Your Reminders {isFetching && <Text>Refetching...</Text>}
+            Your Reminders{' '}
+            {isFetching && <Text style={styles.refetching}>Refetching...</Text>}
           </List.Subheader>
           {reminderList}
         </List.Section>
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
   emptyReminders: {
     textAlign: 'center',
   },
+  refetching: { fontSize: 10, fontStyle: 'italic' },
 });
 
 export default RemindersList;
