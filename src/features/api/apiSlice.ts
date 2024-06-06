@@ -21,9 +21,20 @@ export const giftApi = createApi({
       }),
       invalidatesTags: ['Reminders'],
     }),
+    deleteReminder: builder.mutation({
+      query: ({ id }) => ({
+        url: `/reminders/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Reminders'],
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetRemindersQuery, useAddReminderMutation } = giftApi;
+export const {
+  useGetRemindersQuery,
+  useAddReminderMutation,
+  useDeleteReminderMutation,
+} = giftApi;

@@ -13,7 +13,10 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import { ScrollView } from 'react-native-gesture-handler';
 import React from 'react';
-import { useAddReminderMutation } from '../api/apiSlice';
+import {
+  useAddReminderMutation,
+  useDeleteReminderMutation,
+} from '../api/apiSlice';
 import { DATETIME } from '../../utils/constants';
 
 type ModeType = 'date' | 'time';
@@ -33,6 +36,7 @@ const AddReminder = () => {
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState<ModeType>('date');
   const [addReminder] = useAddReminderMutation();
+  const [deleteReminder] = useDeleteReminderMutation();
   const navigation = useNavigation();
 
   React.useEffect(() => {
@@ -215,7 +219,7 @@ const AddReminder = () => {
                 <Button
                   mode="contained"
                   onPress={() => {
-                    dispatch(remove({ id: params?.id }));
+                    deleteReminder({ id: params?.id });
                     navigation.navigate('Home');
                   }}
                   style={styles.deleteBtn}
