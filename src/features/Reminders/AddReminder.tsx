@@ -16,6 +16,7 @@ import React from 'react';
 import {
   useAddReminderMutation,
   useDeleteReminderMutation,
+  useUpdateReminderMutation,
 } from '../api/apiSlice';
 import { DATETIME } from '../../utils/constants';
 
@@ -37,6 +38,7 @@ const AddReminder = () => {
   const [mode, setMode] = useState<ModeType>('date');
   const [addReminder] = useAddReminderMutation();
   const [deleteReminder] = useDeleteReminderMutation();
+  const [updateReminder] = useUpdateReminderMutation();
   const navigation = useNavigation();
 
   React.useEffect(() => {
@@ -105,7 +107,7 @@ const AddReminder = () => {
           };
 
           if (params?.action === 'edit') {
-            dispatch(update({ id: params?.id, ...payload }));
+            updateReminder({ id: params?.id, patch: payload });
           } else {
             try {
               addReminder({ id: uuid.v4() as string, ...payload });

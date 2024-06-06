@@ -28,6 +28,16 @@ export const giftApi = createApi({
       }),
       invalidatesTags: ['Reminders'],
     }),
+    updateReminder: builder.mutation({
+      query: ({ id, patch }) => ({
+        url: `/reminders/${id}`,
+        method: 'PATCH',
+        body: {
+          ...patch,
+        },
+      }),
+      invalidatesTags: ['Reminders'],
+    }),
   }),
 });
 
@@ -37,4 +47,5 @@ export const {
   useGetRemindersQuery,
   useAddReminderMutation,
   useDeleteReminderMutation,
+  useUpdateReminderMutation,
 } = giftApi;
