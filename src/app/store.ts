@@ -1,13 +1,42 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { giftApi } from '../features/api/apiSlice';
 import { setupListeners } from '@reduxjs/toolkit/query';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const persistConfig = {
+  key: 'root',
+  version: 1,
+  storage: AsyncStorage,
+  // if you do not want to persist this part of the state
+  // blacklist: ['omitedPart']
+};
+
+const rootReducer = combineReducers({
+  [giftApi.reducerPath]: giftApi.reducer,
+  // not persisting this reducer
+  // omitedPart:OmitReducer
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: {
-    [giftApi.reducerPath]: giftApi.reducer,
-  },
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(giftApi.middleware),
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(giftApi.middleware),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
