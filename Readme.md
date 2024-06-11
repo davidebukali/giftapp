@@ -1,21 +1,29 @@
 ## Getting Started
 
-First, install dependencies:
+1. First, install dependencies:
 
 ```bash
 npm install
 ```
 
-Start Expo:
+2. Start Expo:
 
 ```bash
 npm start
 ```
 
-Run dev server in another terminal:
+3. Run dev server in another terminal:
 
 ```bash
 npx json-server ./db/db.json
 ```
 
-Install the expo app on your device and scan the QR Code to get the app
+## Device testing on android:
+
+Install the expo app on your android device and scan QR Code displayed from step 2 above.
+
+## Emulator testing on android:
+
+1. First make sure you have installed [android studio](https://developer.android.com/studio) and atleast one [emulator](https://developer.android.com/studio/run/managing-avds).
+
+2. Press `a` after step 2 to start the emulator
