@@ -11,12 +11,9 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import { ScrollView } from 'react-native-gesture-handler';
 import React from 'react';
-import {
-  useAddReminderMutation,
-  useDeleteReminderMutation,
-  useUpdateReminderMutation,
-} from '../api/apiSlice';
 import { DATETIME } from '../../utils/constants';
+import { useDispatch } from 'react-redux';
+import { add, remove, update } from './reminderSlice';
 
 type ModeType = 'date' | 'time';
 
@@ -33,9 +30,7 @@ const AddReminder = () => {
   );
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState<ModeType>('date');
-  const [addReminder] = useAddReminderMutation();
-  const [deleteReminder] = useDeleteReminderMutation();
-  const [updateReminder] = useUpdateReminderMutation();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   React.useEffect(() => {
@@ -104,10 +99,10 @@ const AddReminder = () => {
           };
 
           if (params?.action === 'edit') {
-            updateReminder({ id: params?.id, patch: payload });
+            dispatch(update({ id: params?.id, ...payload }));
           } else {
             try {
-              addReminder({ id: uuid.v4() as string, ...payload });
+              dispatch(add({ id: uuid.v4() as string, ...payload }));
             } catch (err) {
               console.error('Failed to add a reminder', err);
             }
@@ -218,7 +213,7 @@ const AddReminder = () => {
                 <Button
                   mode="contained"
                   onPress={() => {
-                    deleteReminder({ id: params?.id });
+                    dispatch(remove({ id: params?.id }));
                     navigation.navigate('Home');
                   }}
                   style={styles.deleteBtn}

@@ -2,7 +2,6 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { giftApi } from '../features/api/apiSlice';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import {
-  persistStore,
   persistReducer,
   FLUSH,
   REHYDRATE,
@@ -12,6 +11,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import reminderReducer from '../features/Reminders/reminderSlice';
 
 const persistConfig = {
   key: 'root',
@@ -22,7 +22,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-  [giftApi.reducerPath]: giftApi.reducer,
+  reminder: reminderReducer,
   // not persisting this reducer
   // omitedPart:OmitReducer
 });
@@ -36,7 +36,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(giftApi.middleware),
+    }),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

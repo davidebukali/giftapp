@@ -1,27 +1,18 @@
 import { Image, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { FAB, List } from 'react-native-paper';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../app/store';
 import { format, formatDistance } from 'date-fns';
-import { useGetRemindersQuery } from '../api/apiSlice';
+import { useWindowDimensions } from 'react-native';
+import { selectReminders } from './reminderSlice';
 
 const RemindersList = ({ navigation }) => {
-  const {
-    data = [],
-    error,
-    isLoading,
-    isFetching,
-    isSuccess,
-  } = useGetRemindersQuery();
-  if (isLoading)
-    return (
-      <View style={styles.container}>
-        <Text style={styles.emptyReminders}>Loading...</Text>
-      </View>
-    );
+  const data = useSelector(selectReminders);
+  const dispatch = useDispatch();
+  const { height } = useWindowDimensions();
 
   let reminderList;
-  if (data.length && isSuccess) {
+  if (data) {
     reminderList = data.map((reminder) => {
       return (
         <List.Item
@@ -72,13 +63,10 @@ const RemindersList = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.scrollViewContainer}>
+    <View style={[styles.scrollViewContainer, { height }]}>
       <ScrollView style={styles.container}>
         <List.Section style={styles.listSection}>
-          <List.Subheader>
-            Your Reminders{' '}
-            {isFetching && <Text style={styles.refetching}>Refetching...</Text>}
-          </List.Subheader>
+          <List.Subheader>Your Reminders</List.Subheader>
           {reminderList}
         </List.Section>
       </ScrollView>
@@ -97,11 +85,13 @@ const RemindersList = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   scrollViewContainer: {
-    height: 800,
+    width: '100%',
+    marginBottom: 10,
   },
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    height: '100%',
     width: '100%',
     paddingLeft: 5,
     paddingRight: 5,
