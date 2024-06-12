@@ -34,7 +34,7 @@ const DATA = [
 ];
 
 const { width } = Dimensions.get('window');
-const GiftCategory = ({ navigation }) => {
+const GiftVendor = ({ navigation }) => {
   return (
     <SafeAreaView
       style={{
@@ -80,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GiftCategory;
+export default GiftVendor;

@@ -3,7 +3,7 @@ import * as React from 'react';
 import DrawerNavigation from './DrawerNavigation';
 import AddReminder from '../Reminders/AddReminder';
 import ViewReminder from '../Reminders/ViewReminder';
-import GiftCategory from '../Gift/GiftCategory';
+import GiftVendor from '../Gift/GiftVendor';
 import GiftList from '../Gift/GiftList';
 import ViewGift from '../Gift/ViewGift';
 import { Badge, Button, IconButton, MD3Colors } from 'react-native-paper';
@@ -47,7 +47,7 @@ const StackNavigation = () => {
 
       <Stack.Screen
         name="GiftCategory"
-        component={GiftCategory}
+        component={GiftVendor}
         options={cartButton}
       />
       <Stack.Screen name="GiftList" component={GiftList} options={cartButton} />
