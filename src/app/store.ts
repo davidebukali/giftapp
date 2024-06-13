@@ -12,6 +12,7 @@ import {
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import reminderReducer from '../features/Reminders/reminderSlice';
+import giftSlice from '../features/Gift/giftSlice';
 
 const persistConfig = {
   key: 'root',
@@ -23,6 +24,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   reminder: reminderReducer,
+  VendorsAndProducts: giftSlice,
   // not persisting this reducer
   // omitedPart:OmitReducer
 });

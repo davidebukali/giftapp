@@ -9,32 +9,23 @@ import {
   View,
 } from 'react-native';
 import uuid from 'react-native-uuid';
-
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb',
-    name: 'Cakes',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    name: 'Flowers',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    name: 'Chocolates',
-  },
-  {
-    id: '58694a0f-3da1-471f-5571e29d72',
-    name: 'Hampers',
-  },
-  {
-    id: '4a0f-3da1-471f-bd96-145571e29d72',
-    name: 'Custom',
-  },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { VendorState, initVendors, selectVendors } from './giftSlice';
+import { useEffect, useState } from 'react';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const { width } = Dimensions.get('window');
 const GiftVendor = ({ navigation }) => {
+  const [vendors, setVendors] = useState<VendorState[]>([]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(initVendors())
+      .then(unwrapResult)
+      .then((data) => {
+        setVendors(data);
+      });
+  }, []);
+
   return (
     <SafeAreaView
       style={{
@@ -46,10 +37,16 @@ const GiftVendor = ({ navigation }) => {
     >
       <FlatList
         numColumns={2}
-        data={DATA}
+        data={vendors}
         renderItem={({ item }) => {
           return (
-            <Pressable onPress={() => navigation.navigate('GiftList')}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate('GiftList', {
+                  vendorId: item.id,
+                })
+              }
+            >
               <View style={styles.item}>
                 <Image
                   source={require('../../../assets/placeholder.png')}
