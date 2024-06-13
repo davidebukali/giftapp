@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 50,
+    marginBottom: 50,
   },
   emptyReminders: {
     textAlign: 'center',
