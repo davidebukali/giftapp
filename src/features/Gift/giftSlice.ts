@@ -44,6 +44,14 @@ export const initVendors = createAsyncThunk(
   },
 );
 
+export const initProducts = createAsyncThunk(
+  'vendors/fetchAllProducts',
+  async (id: string, { dispatch, getState, extra, requestId, signal }) => {
+    const response = await giftAPI.fetchProducts(id);
+    return response.json();
+  },
+);
+
 export const giftSlice = createSlice({
   name: 'VendorsAndProducts',
   initialState,
@@ -54,6 +62,13 @@ export const giftSlice = createSlice({
     }),
       builder.addCase(initVendors.fulfilled, (state, { payload }) => {
         state.vendors.push(payload);
+        state.loading = false;
+      }),
+      builder.addCase(initProducts.pending, (state) => {
+        state.loading = true;
+      }),
+      builder.addCase(initProducts.fulfilled, (state, { payload }) => {
+        state.products.push(payload);
         state.loading = false;
       });
   },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -11,28 +11,27 @@ import {
 import uuid from 'react-native-uuid';
 import { List, Searchbar } from 'react-native-paper';
 import { FlatList } from 'react-native-gesture-handler';
+import { ProductState, initProducts } from './giftSlice';
+import { useAppDispatch } from '../../app/store';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { useRoute } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb',
-    name: 'First Item',
-    price: 'First',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    name: 'Second Item',
-    price: 'Second',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e272',
-    name: 'Third Item',
-    price: 'Third',
-  },
-];
 
 const GiftList = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [products, setProducts] = useState<ProductState[]>([]);
+  const { params } = useRoute();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(initProducts(params?.vendorId))
+      .then(unwrapResult)
+      .then((data) => {
+        console.log('Gift List', data);
+
+        setProducts(data);
+      });
+  }, []);
 
   const renderGiftList = ({ item }) => {
     return (
@@ -70,10 +69,9 @@ const GiftList = ({ navigation }) => {
         placeholder="Search"
         onChangeText={setSearchQuery}
         value={searchQuery}
-        style={styles.search}
       />
       <FlatList
-        data={DATA}
+        data={products}
         renderItem={renderGiftList}
         keyExtractor={(item) => item.id}
       ></FlatList>
@@ -93,9 +91,6 @@ const styles = StyleSheet.create({
     width: '40%',
     padding: 0,
     margin: 0,
-  },
-  search: {
-    // margin: 10,
   },
 });
 
