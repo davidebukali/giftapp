@@ -19,14 +19,12 @@ const persistConfig = {
   version: 1,
   storage: AsyncStorage,
   // if you do not want to persist this part of the state
-  // blacklist: ['omitedPart']
+  blacklist: ['VendorsAndProducts'],
 };
 
 const rootReducer = combineReducers({
   reminder: reminderReducer,
   VendorsAndProducts: giftSlice,
-  // not persisting this reducer
-  // omitedPart:OmitReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
