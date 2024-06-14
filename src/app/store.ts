@@ -13,6 +13,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import reminderReducer from '../features/Reminders/reminderSlice';
 import giftSlice from '../features/Gift/giftSlice';
+import { useDispatch } from 'react-redux';
 
 const persistConfig = {
   key: 'root',
@@ -41,7 +42,8 @@ export const store = configureStore({
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+
 export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 
 setupListeners(store.dispatch);

@@ -8,16 +8,15 @@ import {
   Text,
   View,
 } from 'react-native';
-import uuid from 'react-native-uuid';
-import { useDispatch, useSelector } from 'react-redux';
 import { VendorState, initVendors, selectVendors } from './giftSlice';
 import { useEffect, useState } from 'react';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { useAppDispatch } from '../../app/store';
 
 const { width } = Dimensions.get('window');
 const GiftVendor = ({ navigation }) => {
   const [vendors, setVendors] = useState<VendorState[]>([]);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(initVendors())
       .then(unwrapResult)
