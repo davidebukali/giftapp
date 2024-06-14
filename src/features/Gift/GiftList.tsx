@@ -1,13 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import uuid from 'react-native-uuid';
 import { List, Searchbar } from 'react-native-paper';
 import { FlatList } from 'react-native-gesture-handler';
@@ -21,8 +13,8 @@ import {
 import { useAppDispatch } from '../../app/store';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useRoute } from '@react-navigation/native';
-import { filterProducts } from './utils';
 import { useSelector } from 'react-redux';
+import NoData from '../../components/NoData';
 
 const GiftList = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -40,6 +32,9 @@ const GiftList = ({ navigation }) => {
       .then(unwrapResult)
       .then((data) => {
         setProducts(data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
@@ -97,6 +92,7 @@ const GiftList = ({ navigation }) => {
         }
         renderItem={renderGiftList}
         keyExtractor={(item) => item.id}
+        ListEmptyComponent={<NoData />}
       ></FlatList>
     </SafeAreaView>
   );
