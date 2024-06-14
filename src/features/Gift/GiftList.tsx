@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import uuid from 'react-native-uuid';
-import { Searchbar } from 'react-native-paper';
+import { List, Searchbar } from 'react-native-paper';
 import { FlatList } from 'react-native-gesture-handler';
 
 const { width } = Dimensions.get('window');
@@ -17,26 +17,55 @@ const DATA = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb',
     name: 'First Item',
-    price: 'First Item',
+    price: 'First',
   },
   {
     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
     name: 'Second Item',
-    price: 'Second Item',
+    price: 'Second',
   },
   {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    id: '58694a0f-3da1-471f-bd96-145571e272',
     name: 'Third Item',
-    price: 'Third Item',
+    price: 'Third',
   },
 ];
 
 const GiftList = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
+
+  const renderGiftList = ({ item }) => {
+    return (
+      <List.Item
+        style={styles.listItem}
+        key={item.id}
+        title={item.name}
+        description={() => {
+          return (
+            <View>
+              <Text style={styles.listDescription}>{item.price}</Text>
+            </View>
+          );
+        }}
+        left={() => {
+          return (
+            <Image
+              style={styles.listImage}
+              source={require('../../../assets/placeholder.png')}
+            />
+          );
+        }}
+        contentStyle={{ padding: 0, margin: 0, top: 0 }}
+        titleStyle={styles.listTitle}
+        onPress={() => {
+          navigation.navigate('ViewGift');
+        }}
+      />
+    );
+  };
+
   return (
-    <SafeAreaView
-      style={{ flex: 1, justifyContent: 'space-evenly', alignItems: 'center' }}
-    >
+    <SafeAreaView style={styles.container}>
       <Searchbar
         placeholder="Search"
         onChangeText={setSearchQuery}
@@ -44,22 +73,8 @@ const GiftList = ({ navigation }) => {
         style={styles.search}
       />
       <FlatList
-        numColumns={2}
         data={DATA}
-        renderItem={({ item }) => {
-          return (
-            <Pressable onPress={() => navigation.navigate('ViewGift')}>
-              <View style={styles.item}>
-                <Image
-                  source={require('../../../assets/placeholder.png')}
-                  style={styles.image}
-                />
-                <Text style={styles.giftname}>{item.name}</Text>
-                <Text style={styles.giftprice}>{item.price}</Text>
-              </View>
-            </Pressable>
-          );
-        }}
+        renderItem={renderGiftList}
         keyExtractor={(item) => item.id}
       ></FlatList>
     </SafeAreaView>
@@ -68,31 +83,19 @@ const GiftList = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
     padding: 10,
-    gap: 10,
   },
-  item: {
-    maxWidth: '100%',
-    height: 150,
-    padding: 10,
-    marginBottom: 10,
-  },
-  image: {
-    marginBottom: 10,
-  },
-  giftname: {
-    alignContent: 'center',
-    width: '100%',
-  },
-  giftprice: {
-    fontWeight: 'bold',
-    width: '100%',
+  listItem: { padding: 0, margin: 0 },
+  listTitle: { padding: 0, margin: 0, fontSize: 20, marginTop: 5 },
+  listDescription: { fontSize: 15 },
+  listSubDescription: { fontSize: 14, fontStyle: 'italic', marginTop: 5 },
+  listImage: {
+    width: '40%',
+    padding: 0,
+    margin: 0,
   },
   search: {
-    margin: 10,
+    // margin: 10,
   },
 });
 
