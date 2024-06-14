@@ -27,12 +27,14 @@ export interface VendorId {
 export interface VendorsAndProducts {
   vendors: VendorState[];
   products: ProductState[];
+  filteredProducts: ProductState[];
   loading: boolean;
 }
 
 const initialState: VendorsAndProducts = {
   vendors: [],
   products: [],
+  filteredProducts: [],
   loading: false,
 };
 
@@ -55,7 +57,14 @@ export const initProducts = createAsyncThunk(
 export const giftSlice = createSlice({
   name: 'VendorsAndProducts',
   initialState,
-  reducers: {},
+  reducers: {
+    addFilteredProduct: (state, action: PayloadAction<ProductState[]>) => {
+      state.filteredProducts = action.payload;
+    },
+    resetFilteredProduct: (state) => {
+      state.filteredProducts = [];
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(initVendors.pending, (state) => {
       state.loading = true;
@@ -74,9 +83,15 @@ export const giftSlice = createSlice({
   },
 });
 
+export const { addFilteredProduct, resetFilteredProduct } = giftSlice.actions;
+
 export const selectVendors = (state: RootState) =>
   state.VendorsAndProducts.vendors;
+
 export const selectProducts = (state: RootState) =>
   state.VendorsAndProducts.products;
+
+export const selectFilteredProducts = (state: RootState) =>
+  state.VendorsAndProducts.filteredProducts;
 
 export default giftSlice.reducer;

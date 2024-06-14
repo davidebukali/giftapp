@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -11,27 +11,46 @@ import {
 import uuid from 'react-native-uuid';
 import { List, Searchbar } from 'react-native-paper';
 import { FlatList } from 'react-native-gesture-handler';
-import { ProductState, initProducts } from './giftSlice';
+import {
+  ProductState,
+  addFilteredProduct,
+  initProducts,
+  resetFilteredProduct,
+  selectFilteredProducts,
+} from './giftSlice';
 import { useAppDispatch } from '../../app/store';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useRoute } from '@react-navigation/native';
-
-const { width } = Dimensions.get('window');
+import { filterProducts } from './utils';
+import { useSelector } from 'react-redux';
 
 const GiftList = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [products, setProducts] = useState<ProductState[]>([]);
   const { params } = useRoute();
   const dispatch = useAppDispatch();
+  const filteredProductsFromState = useSelector(selectFilteredProducts);
+  const filteredProducts = useMemo(() => {
+    return products.filter(function (product) {
+      return product.name.toLowerCase().indexOf(searchQuery) != -1;
+    });
+  }, [searchQuery]);
   useEffect(() => {
     dispatch(initProducts(params?.vendorId))
       .then(unwrapResult)
       .then((data) => {
-        console.log('Gift List', data);
-
         setProducts(data);
       });
   }, []);
+
+  const searchProducts = (searchText: string) => {
+    setSearchQuery(searchText);
+    if (searchText.length > 0) {
+      dispatch(addFilteredProduct(filteredProducts));
+    } else {
+      dispatch(resetFilteredProduct());
+    }
+  };
 
   const renderGiftList = ({ item }) => {
     return (
@@ -67,11 +86,15 @@ const GiftList = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <Searchbar
         placeholder="Search"
-        onChangeText={setSearchQuery}
+        onChangeText={searchProducts}
         value={searchQuery}
       />
       <FlatList
-        data={products}
+        data={
+          filteredProductsFromState && filteredProductsFromState.length > 0
+            ? filteredProductsFromState
+            : products
+        }
         renderItem={renderGiftList}
         keyExtractor={(item) => item.id}
       ></FlatList>
