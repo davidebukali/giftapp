@@ -8,20 +8,21 @@ import {
   Text,
   View,
 } from 'react-native';
-import { VendorState, initVendors } from '../Gift/giftSlice';
 import { useEffect, useState } from 'react';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { useAppDispatch } from '../../app/store';
 import NoData from '../../components/NoData';
 import { API_URL } from '../../utils/constants';
 
 const { width } = Dimensions.get('window');
 const Vendor = ({ navigation }) => {
-  const [vendors, setVendors] = useState<VendorState[]>([]);
+  const [vendors, setVendors] = useState([]);
   useEffect(() => {
-    fetchVendors().then((data) => {
-      setVendors(data);
-    });
+    fetchVendors()
+      .then((data) => {
+        setVendors(data);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   }, []);
 
   const fetchVendors = async () => {
