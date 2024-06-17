@@ -8,11 +8,10 @@ import { selectReminders } from './reminderSlice';
 
 const RemindersList = ({ navigation }) => {
   const data = useSelector(selectReminders);
-  const dispatch = useDispatch();
   const { height } = useWindowDimensions();
 
   let reminderList;
-  if (data) {
+  if (data && data.length > 0) {
     reminderList = data.map((reminder) => {
       return (
         <List.Item
@@ -101,8 +100,8 @@ const styles = StyleSheet.create({
   listDescription: { fontSize: 15 },
   listSubDescription: { fontSize: 14, fontStyle: 'italic', marginTop: 5 },
   listImage: {
-    borderWidth: 1,
-    borderColor: 'thistle',
+    // borderWidth: 1,
+    // borderColor: 'thistle',
     width: '40%',
   },
   fab: {
