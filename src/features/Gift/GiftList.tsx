@@ -47,7 +47,9 @@ const GiftList = ({ navigation }) => {
         contentStyle={{ padding: 0, margin: 0, top: 0 }}
         titleStyle={styles.listTitle}
         onPress={() => {
-          navigation.navigate('ViewGift');
+          navigation.navigate('ViewGift', {
+            giftId: item.id,
+          });
         }}
       />
     );

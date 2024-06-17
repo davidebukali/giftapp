@@ -54,7 +54,7 @@ export const giftSlice = createSlice({
 // export const { addFilteredProduct, resetFilteredProduct } = giftSlice.actions;
 
 export const {
-  selectById: selectGiftsById,
+  selectById: selectGiftById,
   selectIds: selectGiftIds,
   selectEntities: selectGiftEntities,
   selectAll: selectAllGifts,

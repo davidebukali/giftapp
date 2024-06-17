@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Dimensions,
   Image,
@@ -7,17 +7,19 @@ import {
   Text,
   View,
 } from 'react-native';
-import uuid from 'react-native-uuid';
-import {
-  Button,
-  Checkbox,
-  IconButton,
-  MD3Colors,
-  Searchbar,
-} from 'react-native-paper';
+import { Checkbox, IconButton, MD3Colors, Searchbar } from 'react-native-paper';
+import { useSelector } from 'react-redux';
+import { selectGiftById } from './giftSlice';
+import { useRoute } from '@react-navigation/native';
+import { RootState } from '../../app/store';
 
 const { width } = Dimensions.get('window');
 const ViewGift = ({ navigation }) => {
+  const { params } = useRoute();
+  const gift = useSelector((state: RootState) =>
+    selectGiftById(state, params?.giftId),
+  );
+
   return (
     <View style={{ width: width }}>
       <View style={[styles.container, { width: width }]}>
@@ -27,27 +29,29 @@ const ViewGift = ({ navigation }) => {
             style={styles.defaultGalleryImage}
           />
         </Pressable>
-        <Text style={[styles.giftname, styles.text]}>Black forest</Text>
-        <Text style={[styles.giftprice, styles.text]}>500,000/=</Text>
+        <Text style={[styles.giftname, styles.text]}>{gift.name}</Text>
+        <Text style={[styles.giftprice, styles.text]}>{gift.price}</Text>
         <Text style={[styles.giftdescription, styles.text]}>
-          This is how we roll in the mix
+          {gift.description}
         </Text>
-        <View style={styles.checkbox}>
-          <Checkbox.Item
-            label="Eggless"
-            status={'unchecked'}
-            onPress={() => {
-              console.log('Checked');
-            }}
-          />
-          <Checkbox.Item
-            label="No sugar"
-            status={'unchecked'}
-            onPress={() => {
-              console.log('Checked');
-            }}
-          />
-        </View>
+        {gift.extras.length > 0 && (
+          <View style={styles.checkbox}>
+            <Checkbox.Item
+              label="Eggless"
+              status={'unchecked'}
+              onPress={() => {
+                console.log('Checked');
+              }}
+            />
+            <Checkbox.Item
+              label="No sugar"
+              status={'unchecked'}
+              onPress={() => {
+                console.log('Checked');
+              }}
+            />
+          </View>
+        )}
       </View>
       <View style={styles.addProduct}>
         <IconButton
