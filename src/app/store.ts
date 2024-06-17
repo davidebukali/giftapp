@@ -20,12 +20,12 @@ const persistConfig = {
   version: 1,
   storage: AsyncStorage,
   // if you do not want to persist this part of the state
-  blacklist: ['VendorsAndProducts'],
+  blacklist: ['gifts'],
 };
 
 const rootReducer = combineReducers({
   reminder: reminderReducer,
-  VendorsAndProducts: giftSlice,
+  gifts: giftSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

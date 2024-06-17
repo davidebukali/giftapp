@@ -1,51 +1,27 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import uuid from 'react-native-uuid';
 import { List, Searchbar } from 'react-native-paper';
 import { FlatList } from 'react-native-gesture-handler';
-import {
-  ProductState,
-  addFilteredProduct,
-  initProducts,
-  resetFilteredProduct,
-  selectFilteredProducts,
-} from './giftSlice';
+import { initProducts, selectAllGifts } from './giftSlice';
 import { useAppDispatch } from '../../app/store';
-import { unwrapResult } from '@reduxjs/toolkit';
 import { useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import NoData from '../../components/NoData';
 
 const GiftList = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [products, setProducts] = useState<ProductState[]>([]);
   const { params } = useRoute();
   const dispatch = useAppDispatch();
-  const filteredProductsFromState = useSelector(selectFilteredProducts);
-  const filteredProducts = useMemo(() => {
-    return products.filter(function (product) {
-      return product.name.toLowerCase().indexOf(searchQuery) != -1;
+  const gifts = useSelector(selectAllGifts);
+  const filteredGifts = useMemo(() => {
+    const data = gifts.filter(function (gift) {
+      return gift.name.toLowerCase().indexOf(searchQuery) != -1;
     });
+    return searchQuery ? data : [];
   }, [searchQuery]);
   useEffect(() => {
-    dispatch(initProducts(params?.vendorId))
-      .then(unwrapResult)
-      .then((data) => {
-        setProducts(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch(initProducts(params?.vendorId));
   }, []);
-
-  const searchProducts = (searchText: string) => {
-    setSearchQuery(searchText);
-    if (searchText.length > 0) {
-      dispatch(addFilteredProduct(filteredProducts));
-    } else {
-      dispatch(resetFilteredProduct());
-    }
-  };
 
   const renderGiftList = ({ item }) => {
     return (
@@ -81,15 +57,13 @@ const GiftList = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <Searchbar
         placeholder="Search"
-        onChangeText={searchProducts}
+        onChangeText={(searchText: string) => {
+          setSearchQuery(searchText);
+        }}
         value={searchQuery}
       />
       <FlatList
-        data={
-          filteredProductsFromState && filteredProductsFromState.length > 0
-            ? filteredProductsFromState
-            : products
-        }
+        data={filteredGifts && filteredGifts.length > 0 ? filteredGifts : gifts}
         renderItem={renderGiftList}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={<NoData />}

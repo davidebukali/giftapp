@@ -1,16 +1,13 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createEntityAdapter,
+  createSlice,
+} from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import uuid from 'react-native-uuid';
 import { RootState } from '../../app/store';
-import giftAPI from './giftAPI';
+import { API_URL } from '../../utils/constants';
 
-export interface VendorState {
-  id: string;
-  name: string;
-  image: string;
-}
-
-export interface ProductState {
+export interface GiftState {
   id: string;
   vendorId: string;
   name: string;
@@ -18,80 +15,50 @@ export interface ProductState {
   price: string;
   image: string | null;
   description: string;
+  extras: {
+    name: String;
+    price: String;
+  }[];
 }
-
-export interface VendorId {
-  id: string;
-}
-
-export interface VendorsAndProducts {
-  vendors: VendorState[];
-  products: ProductState[];
-  filteredProducts: ProductState[];
-  loading: boolean;
-}
-
-const initialState: VendorsAndProducts = {
-  vendors: [],
-  products: [],
-  filteredProducts: [],
-  loading: false,
-};
-
-export const initVendors = createAsyncThunk(
-  'vendors/fetchAllVendors',
-  async (action: void, { dispatch, getState, extra, requestId, signal }) => {
-    const response = await giftAPI.fetchVendors();
-    return response.json();
-  },
-);
 
 export const initProducts = createAsyncThunk(
   'vendors/fetchAllProducts',
-  async (id: string, { dispatch, getState, extra, requestId, signal }) => {
-    const response = await giftAPI.fetchProducts(id);
+  async (id: string, {}) => {
+    const response = await fetch(`${API_URL}/gifts?vendorId=${id}`);
     return response.json();
   },
 );
 
+export const giftAdapter = createEntityAdapter<GiftState>();
+
 export const giftSlice = createSlice({
-  name: 'VendorsAndProducts',
-  initialState,
-  reducers: {
-    addFilteredProduct: (state, action: PayloadAction<ProductState[]>) => {
-      state.filteredProducts = action.payload;
-    },
-    resetFilteredProduct: (state) => {
-      state.filteredProducts = [];
-    },
-  },
+  name: 'gifts',
+  initialState: giftAdapter.getInitialState({
+    loading: false,
+  }),
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(initVendors.pending, (state) => {
+    builder.addCase(initProducts.pending, (state) => {
       state.loading = true;
     }),
-      builder.addCase(initVendors.fulfilled, (state, { payload }) => {
-        state.vendors.push(payload);
-        state.loading = false;
-      }),
-      builder.addCase(initProducts.pending, (state) => {
-        state.loading = true;
-      }),
-      builder.addCase(initProducts.fulfilled, (state, { payload }) => {
-        state.products.push(payload);
-        state.loading = false;
-      });
+      builder.addCase(
+        initProducts.fulfilled,
+        (state, action: PayloadAction<GiftState[]>) => {
+          giftAdapter.setAll(state, action.payload);
+          state.loading = false;
+        },
+      );
   },
 });
 
-export const { addFilteredProduct, resetFilteredProduct } = giftSlice.actions;
+// export const { addFilteredProduct, resetFilteredProduct } = giftSlice.actions;
 
-export const selectVendors = (state: RootState) =>
-  state.VendorsAndProducts.vendors;
-
-export const selectProducts = (state: RootState) =>
-  state.VendorsAndProducts.products;
-
-export const selectFilteredProducts = (state: RootState) =>
-  state.VendorsAndProducts.filteredProducts;
+export const {
+  selectById: selectGiftsById,
+  selectIds: selectGiftIds,
+  selectEntities: selectGiftEntities,
+  selectAll: selectAllGifts,
+  selectTotal: selectTotalGifts,
+} = giftAdapter.getSelectors((state: RootState) => state.gifts);
 
 export default giftSlice.reducer;
