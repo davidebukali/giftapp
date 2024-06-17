@@ -3,7 +3,7 @@ import * as React from 'react';
 import RemindersList from '../Reminders/RemindersList';
 import OrderList from '../Orders/OrderList';
 import Profile from '../User/Profile';
-import GiftVendor from '../Gift/GiftVendor';
+import Vendor from '../Vendors/Vendor';
 
 const Drawer = createDrawerNavigator();
 
@@ -11,7 +11,7 @@ const DrawerNavigation = () => {
   return (
     <Drawer.Navigator>
       <Drawer.Screen name="Home" component={RemindersList} />
-      <Drawer.Screen name="Gifts" component={GiftVendor} />
+      <Drawer.Screen name="Gifts" component={Vendor} />
       <Drawer.Screen name="Orders" component={OrderList} />
       <Drawer.Screen name="Profile" component={Profile} />
     </Drawer.Navigator>

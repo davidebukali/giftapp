@@ -8,26 +8,26 @@ import {
   Text,
   View,
 } from 'react-native';
-import { VendorState, initVendors } from './giftSlice';
+import { VendorState, initVendors } from '../Gift/giftSlice';
 import { useEffect, useState } from 'react';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useAppDispatch } from '../../app/store';
 import NoData from '../../components/NoData';
+import { API_URL } from '../../utils/constants';
 
 const { width } = Dimensions.get('window');
-const GiftVendor = ({ navigation }) => {
+const Vendor = ({ navigation }) => {
   const [vendors, setVendors] = useState<VendorState[]>([]);
-  const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(initVendors())
-      .then(unwrapResult)
-      .then((data) => {
-        setVendors(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    fetchVendors().then((data) => {
+      setVendors(data);
+    });
   }, []);
+
+  const fetchVendors = async () => {
+    const response = await fetch(`${API_URL}/vendors`);
+    return response.json();
+  };
 
   return (
     <SafeAreaView
@@ -81,4 +81,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GiftVendor;
+export default Vendor;
