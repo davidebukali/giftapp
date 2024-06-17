@@ -22,7 +22,7 @@
   ],
   "gifts": [
     {
-      "id": 111,
+      "id": "111",
       "vendorId": "1",
       "name": "Chocolate chip",
       "category": "Cookies",
@@ -32,7 +32,7 @@
       "extras": []
     },
     {
-      "id": 1113,
+      "id": "1113",
       "vendorId": "1",
       "name": "Red Velvet",
       "category": "Cakes",
@@ -51,7 +51,7 @@
       ]
     },
     {
-      "id": 1111,
+      "id": "1111",
       "vendorId": "2",
       "name": "Red roses",
       "category": "Flowers",
@@ -61,7 +61,7 @@
       "extras": []
     },
     {
-      "id": 1112,
+      "id": "1112",
       "vendorId": "2",
       "name": "White Rose",
       "category": "Flowers",
