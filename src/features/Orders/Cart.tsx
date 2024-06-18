@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import uuid from 'react-native-uuid';
 import {
+  DataTable,
   Button,
   Checkbox,
   Divider,
@@ -16,6 +17,7 @@ import {
   MD3Colors,
   Searchbar,
   TextInput,
+  HelperText,
 } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -24,44 +26,83 @@ const Cart = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Your Order</Text>
-      <View style={styles.cartItem}>
-        <Text>Lemon</Text>
+      <View style={styles.orderList}>
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title>Gift</DataTable.Title>
+            <DataTable.Title numeric>Qty</DataTable.Title>
+            <DataTable.Title numeric>Price</DataTable.Title>
+          </DataTable.Header>
+          <DataTable.Row>
+            <DataTable.Cell>Chocolate muffins</DataTable.Cell>
+            <DataTable.Cell numeric>3</DataTable.Cell>
+            <DataTable.Cell numeric>20,000/=</DataTable.Cell>
+          </DataTable.Row>
+          <DataTable.Row>
+            <DataTable.Cell>Red velvet</DataTable.Cell>
+            <DataTable.Cell numeric>1</DataTable.Cell>
+            <DataTable.Cell numeric>200,000/=</DataTable.Cell>
+          </DataTable.Row>
+        </DataTable>
       </View>
-      <Divider />
-      <View style={styles.cartItem}>
-        <Text>Lemon</Text>
+
+      <View style={styles.deliverySummary}>
+        <View style={styles.deliveryDetails}>
+          <Text>Names</Text>
+          <TextInput
+            label="Who should we deliver this to ?"
+            // onChangeText={text => setText(text)}
+          />
+        </View>
+
+        <View style={styles.deliveryDetails}>
+          <Text>Delivery Details</Text>
+          <TextInput
+            label="Where should we deliver your gift ?"
+            multiline={true}
+            // onChangeText={text => setText(text)}
+          />
+          <HelperText type="info">
+            If possible, include a google pin to help the delivery man.
+          </HelperText>
+        </View>
+
+        <View style={styles.deliveryDetails}>
+          <Text>Delivery contact</Text>
+          <TextInput
+            keyboardType="numeric"
+            label="Phone number of the person to deliver this gift"
+            // onChangeText={text => setText(text)}
+          />
+        </View>
       </View>
-      <Divider />
-      <View style={styles.cartItem}>
-        <Text>Lemon</Text>
-      </View>
-      <Divider />
-      <View style={styles.deliveryDetails}>
-        <Text style={styles.header}>Delivery Details</Text>
-        <TextInput
-          label="Where should we deliver your gift ?"
-          multiline={true}
-          // onChangeText={text => setText(text)}
-        />
-      </View>
-      <View style={styles.deliveryDetails}>
+
+      <View style={styles.deliverySummary}>
         <Text style={styles.header}>Summary</Text>
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryTextQty}>Lemon</Text>
-          <Text style={styles.summaryTextLeft}>Lemon</Text>
-          <Text style={styles.summaryTextRight}>Lemon</Text>
-        </View>
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryTextQty}>Lemon</Text>
-          <Text style={styles.summaryTextLeft}>Lemon</Text>
-          <Text style={styles.summaryTextRight}>Lemon</Text>
-        </View>
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryTextQty}>Lemon</Text>
-          <Text style={styles.summaryTextLeft}>Lemon</Text>
-          <Text style={styles.summaryTextRight}>Lemontear</Text>
+        <View style={styles.orderList}>
+          <DataTable>
+            <DataTable.Row>
+              <DataTable.Cell>Delivery</DataTable.Cell>
+              <DataTable.Cell numeric>10,000/=</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>Service Fee</DataTable.Cell>
+              <DataTable.Cell numeric>15,000/=</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>Products</DataTable.Cell>
+              <DataTable.Cell numeric>115,000/=</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell textStyle={styles.total}>Total</DataTable.Cell>
+              <DataTable.Cell textStyle={styles.total} numeric>
+                150,000/=
+              </DataTable.Cell>
+            </DataTable.Row>
+          </DataTable>
         </View>
       </View>
+
       <View style={styles.outerContainer}>
         <Button
           mode="contained"
@@ -88,30 +129,19 @@ const styles = StyleSheet.create({
   },
   cartItem: {
     fontSize: 18,
-    margin: 10,
-    padding: 10,
   },
   deliveryDetails: {
-    backgroundColor: '#D3D3D3',
-    margin: 10,
+    // backgroundColor: '#D3D3D3',
+    margin: 5,
   },
-  summaryItem: {
-    fontSize: 18,
-    margin: 10,
-    flexDirection: 'row',
-  },
-  summaryTextQty: {
+  total: {
     fontWeight: 'bold',
   },
-  summaryTextLeft: {
-    marginLeft: 20,
+  orderList: {
+    margin: 5,
   },
-  summaryTextRight: {
-    marginLeft: 180,
-  },
-  buyGift: {
-    padding: 10,
-    margin: 10,
+  deliverySummary: {
+    marginTop: 20,
   },
   outerContainer: {
     backgroundColor: 'transparent',
