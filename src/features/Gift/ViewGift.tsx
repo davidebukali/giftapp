@@ -7,18 +7,24 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Checkbox, IconButton, MD3Colors, Searchbar } from 'react-native-paper';
+import { IconButton, MD3Colors } from 'react-native-paper';
 import { useSelector } from 'react-redux';
-import { selectGiftById } from './giftSlice';
+import { selectGiftById, updateExtras } from './giftSlice';
 import { useRoute } from '@react-navigation/native';
-import { RootState } from '../../app/store';
+import { RootState, useAppDispatch } from '../../app/store';
+import Extras from './Extras';
 
 const { width } = Dimensions.get('window');
 const ViewGift = ({ navigation }) => {
   const { params } = useRoute();
+  const dispatch = useAppDispatch();
   const gift = useSelector((state: RootState) =>
     selectGiftById(state, params?.giftId),
   );
+
+  const toggleCheckbox = (checkboxId: string) => {
+    dispatch(updateExtras({ id: gift.id, checkboxId }));
+  };
 
   return (
     <View style={{ width: width }}>
@@ -35,22 +41,7 @@ const ViewGift = ({ navigation }) => {
           {gift.description}
         </Text>
         {gift.extras.length > 0 && (
-          <View style={styles.checkbox}>
-            <Checkbox.Item
-              label="Eggless"
-              status={'unchecked'}
-              onPress={() => {
-                console.log('Checked');
-              }}
-            />
-            <Checkbox.Item
-              label="No sugar"
-              status={'unchecked'}
-              onPress={() => {
-                console.log('Checked');
-              }}
-            />
-          </View>
+          <Extras data={gift.extras} toggleCheckbox={toggleCheckbox} />
         )}
       </View>
       <View style={styles.addProduct}>
@@ -98,12 +89,6 @@ const styles = StyleSheet.create({
   giftdescription: {
     marginTop: 40,
     fontSize: 18,
-  },
-  search: {
-    margin: 10,
-  },
-  checkbox: {
-    marginTop: 10,
   },
   addProduct: {
     marginTop: 50,

@@ -16,8 +16,10 @@ export interface GiftState {
   image: string | null;
   description: string;
   extras: {
+    id: string;
     name: String;
     price: String;
+    status: boolean;
   }[];
 }
 
@@ -36,7 +38,16 @@ export const giftSlice = createSlice({
   initialState: giftAdapter.getInitialState({
     loading: false,
   }),
-  reducers: {},
+  reducers: {
+    updateExtras(state, action) {
+      state.entities[action.payload.id]['extras'].map((extra) => {
+        if (extra.id == action.payload.checkboxId) {
+          extra.status = !extra.status;
+        }
+        return extra;
+      });
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(initProducts.pending, (state) => {
       state.loading = true;
@@ -51,7 +62,7 @@ export const giftSlice = createSlice({
   },
 });
 
-// export const { addFilteredProduct, resetFilteredProduct } = giftSlice.actions;
+export const { updateExtras } = giftSlice.actions;
 
 export const {
   selectById: selectGiftById,
