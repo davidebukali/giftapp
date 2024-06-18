@@ -41,12 +41,16 @@
       "description": "Piece of heaven in your hands.",
       "extras": [
         {
+          "id": "1",
           "name": "Eggless",
-          "price": 10000
+          "price": 10000,
+          "status": true
         },
         {
+          "id": "2",
           "name": "Alternative sweetner/No sugar",
-          "price": 10000
+          "price": 10000,
+          "status": false
         }
       ]
     },
