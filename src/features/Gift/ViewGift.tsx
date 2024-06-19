@@ -10,6 +10,11 @@ import {
 import { IconButton, MD3Colors } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { selectGiftById, updateExtras } from './giftSlice';
+import {
+  addToCart,
+  removeFromCart,
+  selectCartItems,
+} from '../Orders/orderSlice';
 import { useRoute } from '@react-navigation/native';
 import { RootState, useAppDispatch } from '../../app/store';
 import Extras from './Extras';
@@ -21,10 +26,22 @@ const ViewGift = ({ navigation }) => {
   const gift = useSelector((state: RootState) =>
     selectGiftById(state, params?.giftId),
   );
+  const cartItems = useSelector(selectCartItems);
+
+  const renderGiftQuantity = () => {
+    const currentCartItem = cartItems.find(
+      (item) => item.productId === gift.id,
+    );
+    return currentCartItem ? currentCartItem.quantity : 0;
+  };
 
   const toggleCheckbox = (checkboxId: string) => {
     dispatch(updateExtras({ id: gift.id, checkboxId }));
   };
+
+  if (!params?.giftId) {
+    navigation.navigate('Gifts');
+  }
 
   return (
     <View style={{ width: width }}>
@@ -50,15 +67,31 @@ const ViewGift = ({ navigation }) => {
           icon="minus"
           iconColor={MD3Colors.secondary50}
           size={40}
-          onPress={() => console.log('Pressed')}
+          onPress={() =>
+            dispatch(
+              removeFromCart({
+                productId: gift.id,
+              }),
+            )
+          }
         />
-        <Text style={styles.giftNumber}>1</Text>
+        <Text style={styles.giftNumber}>{renderGiftQuantity()}</Text>
         <IconButton
           mode="contained"
           icon="plus"
           iconColor={MD3Colors.secondary50}
           size={40}
-          onPress={() => console.log('Pressed')}
+          onPress={() =>
+            gift &&
+            dispatch(
+              addToCart({
+                productId: gift.id,
+                name: gift.name,
+                cost: gift.price,
+                quantity: 1,
+              }),
+            )
+          }
         />
       </View>
     </View>

@@ -12,12 +12,13 @@ import {
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import reminderReducer from '../features/Reminders/reminderSlice';
-import giftSlice from '../features/Gift/giftSlice';
+import giftReducer from '../features/Gift/giftSlice';
+import orderReducer from '../features/Orders/orderSlice';
 import { useDispatch } from 'react-redux';
 
 const persistConfig = {
   key: 'root',
-  version: 1,
+  version: 2,
   storage: AsyncStorage,
   // if you do not want to persist this part of the state
   blacklist: ['gifts'],
@@ -25,7 +26,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   reminder: reminderReducer,
-  gifts: giftSlice,
+  gifts: giftReducer,
+  orders: orderReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

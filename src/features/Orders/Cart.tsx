@@ -20,9 +20,15 @@ import {
   HelperText,
 } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
+import { selectCartItems } from '../Orders/orderSlice';
 
 const { width } = Dimensions.get('window');
 const Cart = ({ navigation }) => {
+  const cartItems = useSelector(selectCartItems);
+
+  console.log('Cart: ', cartItems);
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Your Order</Text>
@@ -62,8 +68,17 @@ const Cart = ({ navigation }) => {
             multiline={true}
             // onChangeText={text => setText(text)}
           />
+        </View>
+
+        <View style={styles.deliveryDetails}>
+          <Text>Google Pin or directions</Text>
+          <TextInput
+            label="Pin or directions"
+            multiline={true}
+            // onChangeText={text => setText(text)}
+          />
           <HelperText type="info">
-            If possible, include a google pin to help the delivery man.
+            Include a google pin or directions to help the delivery man.
           </HelperText>
         </View>
 
