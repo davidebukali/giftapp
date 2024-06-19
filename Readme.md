@@ -12,11 +12,13 @@ npm install
 npm start
 ```
 
-3. Run dev server in another terminal:
+3. Run dev server (API) in another terminal:
 
 ```bash
 npx json-server ./db/db.json
 ```
+
+4. Update API_URL in `./src/utils/constants.ts` to match Expo IP address from step 2 above
 
 ## Device testing on android:
 
