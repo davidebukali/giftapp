@@ -32,7 +32,7 @@ const ViewGift = ({ navigation }) => {
     const currentCartItem = cartItems.find(
       (item) => item.productId === gift.id,
     );
-    return currentCartItem ? currentCartItem.quantity : 0;
+    return currentCartItem ? currentCartItem.quantity : '_';
   };
 
   const toggleCheckbox = (checkboxId: string) => {

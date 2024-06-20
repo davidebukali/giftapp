@@ -27,29 +27,23 @@ const { width } = Dimensions.get('window');
 const Cart = ({ navigation }) => {
   const cartItems = useSelector(selectCartItems);
 
-  console.log('Cart: ', cartItems);
+  const renderCart = () => {
+    return cartItems.map((cartItem) => (
+      <DataTable.Row key={cartItem.productId}>
+        <DataTable.Cell textStyle={styles.cellText} style={{ flex: 3 }}>
+          {cartItem.name}
+        </DataTable.Cell>
+        <DataTable.Cell>x{cartItem.quantity}</DataTable.Cell>
+        <DataTable.Cell numeric>{cartItem.cost}</DataTable.Cell>
+      </DataTable.Row>
+    ));
+  };
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Your Order</Text>
       <View style={styles.orderList}>
-        <DataTable>
-          <DataTable.Header>
-            <DataTable.Title>Gift</DataTable.Title>
-            <DataTable.Title numeric>Qty</DataTable.Title>
-            <DataTable.Title numeric>Price</DataTable.Title>
-          </DataTable.Header>
-          <DataTable.Row>
-            <DataTable.Cell>Chocolate muffins</DataTable.Cell>
-            <DataTable.Cell numeric>3</DataTable.Cell>
-            <DataTable.Cell numeric>20,000/=</DataTable.Cell>
-          </DataTable.Row>
-          <DataTable.Row>
-            <DataTable.Cell>Red velvet</DataTable.Cell>
-            <DataTable.Cell numeric>1</DataTable.Cell>
-            <DataTable.Cell numeric>200,000/=</DataTable.Cell>
-          </DataTable.Row>
-        </DataTable>
+        <DataTable>{renderCart()}</DataTable>
       </View>
 
       <View style={styles.deliverySummary}>
@@ -162,6 +156,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     width: '100%',
     padding: 5,
+  },
+  cellText: {
+    width: '100%',
   },
 });
 
