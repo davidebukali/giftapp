@@ -6,6 +6,7 @@ import ViewReminder from '../Reminders/ViewReminder';
 import Vendor from '../Vendors/Vendor';
 import GiftList from '../Gift/GiftList';
 import ViewGift from '../Gift/ViewGift';
+import OrderAddress from '../Orders/OrderAddress';
 import { Badge, Button, IconButton, MD3Colors } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -55,6 +56,7 @@ const StackNavigation = () => {
 
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="ViewOrder" component={ViewOrder} />
+      <Stack.Screen name="Address" component={OrderAddress} />
     </Stack.Navigator>
   );
 };
