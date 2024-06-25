@@ -15,13 +15,21 @@ import {
   Avatar,
 } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
-import { selectCartItems, selectOrder } from '../Orders/orderSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addRecipientContact,
+  addRecipientNames,
+  selectCartItems,
+  selectOrder,
+} from '../Orders/orderSlice';
+import { currencyFormat } from '../../utils/index';
+import { SERVICE_FEE } from '../../utils/constants';
 
 const { width } = Dimensions.get('window');
 const Cart = ({ navigation }) => {
   const cartItems = useSelector(selectCartItems);
   const order = useSelector(selectOrder);
+  const dispatch = useDispatch();
 
   const renderCart = () => {
     return cartItems.map((cartItem) => (
@@ -35,6 +43,40 @@ const Cart = ({ navigation }) => {
     ));
   };
 
+  const renderSummary = () => {
+    const sumProductCost = order.products.reduce(
+      (acc, item) => parseInt(item.cost) * item.quantity + acc,
+      0,
+    );
+    const deliveryFee = 20000;
+    const total = sumProductCost + SERVICE_FEE + deliveryFee;
+
+    return (
+      <>
+        <DataTable.Row>
+          <DataTable.Cell>Delivery</DataTable.Cell>
+          <DataTable.Cell numeric>{currencyFormat(deliveryFee)}</DataTable.Cell>
+        </DataTable.Row>
+        <DataTable.Row>
+          <DataTable.Cell>Service Fee</DataTable.Cell>
+          <DataTable.Cell numeric>{currencyFormat(SERVICE_FEE)}</DataTable.Cell>
+        </DataTable.Row>
+        <DataTable.Row>
+          <DataTable.Cell>Products</DataTable.Cell>
+          <DataTable.Cell numeric>
+            {currencyFormat(sumProductCost)}
+          </DataTable.Cell>
+        </DataTable.Row>
+        <DataTable.Row>
+          <DataTable.Cell textStyle={styles.total}>Total</DataTable.Cell>
+          <DataTable.Cell textStyle={styles.total} numeric>
+            {currencyFormat(total)}
+          </DataTable.Cell>
+        </DataTable.Row>
+      </>
+    );
+  };
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Your Order</Text>
@@ -45,8 +87,15 @@ const Cart = ({ navigation }) => {
       <View style={styles.deliverySummary}>
         <View style={styles.deliveryDetails}>
           <TextInput
-            label="Who should we deliver this to ?"
-            // onChangeText={text => setText(text)}
+            label="Names of the recipient ?"
+            value={order.recipientNames}
+            onChangeText={(names) =>
+              dispatch(
+                addRecipientNames({
+                  names,
+                }),
+              )
+            }
           />
         </View>
 
@@ -67,7 +116,14 @@ const Cart = ({ navigation }) => {
           <TextInput
             keyboardType="numeric"
             label="Phone number of the gift recipient"
-            // onChangeText={text => setText(text)}
+            value={order.deliveryContact}
+            onChangeText={(contact) =>
+              dispatch(
+                addRecipientContact({
+                  contact,
+                }),
+              )
+            }
           />
         </View>
       </View>
@@ -75,26 +131,7 @@ const Cart = ({ navigation }) => {
       <View style={styles.deliverySummary}>
         <Text style={styles.header}>Summary</Text>
         <View style={styles.orderList}>
-          <DataTable>
-            <DataTable.Row>
-              <DataTable.Cell>Delivery</DataTable.Cell>
-              <DataTable.Cell numeric>10,000/=</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>Service Fee</DataTable.Cell>
-              <DataTable.Cell numeric>15,000/=</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell>Products</DataTable.Cell>
-              <DataTable.Cell numeric>115,000/=</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row>
-              <DataTable.Cell textStyle={styles.total}>Total</DataTable.Cell>
-              <DataTable.Cell textStyle={styles.total} numeric>
-                150,000/=
-              </DataTable.Cell>
-            </DataTable.Row>
-          </DataTable>
+          <DataTable>{renderSummary()}</DataTable>
         </View>
       </View>
 

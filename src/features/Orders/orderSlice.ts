@@ -66,12 +66,26 @@ export const orderSlice = createSlice({
         action.payload.deliveryAdditionalInformation;
       state.deliveryCoordinates = action.payload.deliveryCoordinates;
     },
+    addRecipientNames(state, action) {
+      console.log('Saving recipient names', action.payload);
+      state.recipientNames = action.payload.names;
+    },
+    addRecipientContact(state, action) {
+      console.log('Saving contact information', action.payload);
+
+      state.deliveryContact = action.payload.contact;
+    },
   },
   extraReducers: (builder) => {},
 });
 
-export const { addToCart, removeFromCart, updateDeliveryDetails } =
-  orderSlice.actions;
+export const {
+  addRecipientContact,
+  addRecipientNames,
+  addToCart,
+  removeFromCart,
+  updateDeliveryDetails,
+} = orderSlice.actions;
 
 export const selectCartItems = (state: RootState) => state.orders.products;
 
