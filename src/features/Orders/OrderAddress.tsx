@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
-import { Button, TextInput } from 'react-native-paper';
+import { Button, Snackbar, TextInput } from 'react-native-paper';
 import { ExpoLeaflet } from 'expo-leaflet';
 import * as Location from 'expo-location';
 import { MapLayer } from 'expo-leaflet';
@@ -18,6 +18,8 @@ import { MapMarker } from 'expo-leaflet';
 import { Formik } from 'formik';
 import { ZOOM } from '../../utils/constants';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { updateDeliveryDetails } from './orderSlice';
 
 const mapLayers: Array<MapLayer> = [
   {
@@ -46,9 +48,11 @@ const AddressSchema = Yup.object().shape({
 
 const OrderAddress = ({ navigation }) => {
   const [additionalInformation, setAdditionalInformation] = useState('');
+  const [visible, setVisible] = useState(false);
   const [mapMarkers, setMapMarkers] = useState<MapMarker[]>([]);
   const [mapCenterPosition, setMapCenterPosition] = useState(initialPosition);
   const [ownPosition, setOwnPosition] = useState<null | LatLngLiteral>(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getLocationAsync = async () => {
@@ -72,15 +76,16 @@ const OrderAddress = ({ navigation }) => {
   }, []);
 
   const onSaveaddress = () => {
-    const payload = {
-      additionalInformation,
-      latlng: mapMarkers[0],
-    };
-
-    if (mapMarkers.length > 1) {
-      // dispatch(update({ id: params?.id, ...payload }));
-      // navigation.navigate('Home');
+    if (mapMarkers.length > 0) {
+      dispatch(
+        updateDeliveryDetails({
+          additionalInformation,
+          deliveryCoordinates: mapMarkers[0]['position'],
+        }),
+      );
+      navigation.navigate('Cart');
     } else {
+      setVisible(true);
     }
   };
 
@@ -140,17 +145,28 @@ const OrderAddress = ({ navigation }) => {
               ? JSON.stringify(mapMarkers[0]['position'])
               : ''
           }
-          style={{ display: 'flex', marginTop: 20 }}
+          style={{ display: 'none', marginTop: 20 }}
         />
         <Button
-          icon="content-save"
-          mode="outlined"
+          mode="contained"
           onPress={onSaveaddress}
           style={styles.saveAddress}
         >
           Save address
         </Button>
       </View>
+      <Snackbar
+        visible={visible}
+        onDismiss={() => {}}
+        action={{
+          label: 'Close',
+          onPress: () => {
+            setVisible(!visible);
+          },
+        }}
+      >
+        Select an address on the map
+      </Snackbar>
     </SafeAreaView>
   );
 };
@@ -189,6 +205,7 @@ const styles = StyleSheet.create({
   },
   saveAddress: {
     marginTop: 20,
+    marginBottom: 20,
   },
 });
 

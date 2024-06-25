@@ -16,11 +16,12 @@ import {
 } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
-import { selectCartItems } from '../Orders/orderSlice';
+import { selectCartItems, selectOrder } from '../Orders/orderSlice';
 
 const { width } = Dimensions.get('window');
 const Cart = ({ navigation }) => {
   const cartItems = useSelector(selectCartItems);
+  const order = useSelector(selectOrder);
 
   const renderCart = () => {
     return cartItems.map((cartItem) => (
@@ -54,7 +55,9 @@ const Cart = ({ navigation }) => {
             <Card.Cover source={require('../../../assets/kampalamap.jpg')} />
             <Card.Content>
               <Text variant="bodyMedium" style={styles.deliveryAddress}>
-                Set a delivery address
+                {order.deliveryCoordinates
+                  ? 'Address saved'
+                  : 'Set a delivery address'}
               </Text>
             </Card.Content>
           </Card>
