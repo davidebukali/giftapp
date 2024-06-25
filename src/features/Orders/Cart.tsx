@@ -1,23 +1,18 @@
 import React, { useState } from 'react';
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
 import uuid from 'react-native-uuid';
 import {
   DataTable,
   Button,
   Checkbox,
-  Divider,
+  Text,
   IconButton,
   MD3Colors,
   Searchbar,
   TextInput,
   HelperText,
+  Card,
+  Avatar,
 } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
@@ -48,39 +43,27 @@ const Cart = ({ navigation }) => {
 
       <View style={styles.deliverySummary}>
         <View style={styles.deliveryDetails}>
-          <Text>Names</Text>
           <TextInput
             label="Who should we deliver this to ?"
             // onChangeText={text => setText(text)}
           />
         </View>
 
-        <View style={styles.deliveryDetails}>
-          <Text>Delivery Details</Text>
-          <TextInput
-            label="Where should we deliver your gift ?"
-            multiline={true}
-            // onChangeText={text => setText(text)}
-          />
+        <View style={styles.deliveryCard}>
+          <Card onPress={() => navigation.navigate('Address')}>
+            <Card.Cover source={require('../../../assets/kampalamap.jpg')} />
+            <Card.Content>
+              <Text variant="bodyMedium" style={styles.deliveryAddress}>
+                Set a delivery address
+              </Text>
+            </Card.Content>
+          </Card>
         </View>
 
         <View style={styles.deliveryDetails}>
-          <Text>Google Pin or directions</Text>
-          <TextInput
-            label="Pin or directions"
-            multiline={true}
-            // onChangeText={text => setText(text)}
-          />
-          <HelperText type="info">
-            Include a google pin or directions to help the delivery man.
-          </HelperText>
-        </View>
-
-        <View style={styles.deliveryDetails}>
-          <Text>Delivery contact</Text>
           <TextInput
             keyboardType="numeric"
-            label="Phone number of the person to deliver this gift"
+            label="Phone number of the gift recipient"
             // onChangeText={text => setText(text)}
           />
         </View>
@@ -159,6 +142,15 @@ const styles = StyleSheet.create({
   },
   cellText: {
     width: '100%',
+  },
+  deliveryCard: {
+    marginBottom: 20,
+    marginTop: 20,
+    margin: 5,
+  },
+  deliveryAddress: {
+    margin: 10,
+    fontWeight: 'bold',
   },
 });
 
