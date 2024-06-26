@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Dimensions, Image, Pressable, StyleSheet, View } from 'react-native';
 import uuid from 'react-native-uuid';
 import {
@@ -24,64 +24,84 @@ import {
 } from '../Orders/orderSlice';
 import { currencyFormat } from '../../utils/index';
 import { SERVICE_FEE } from '../../utils/constants';
+import { Cart as CartType } from './orderSlice';
 
-const { width } = Dimensions.get('window');
+interface OrderSummaryItems {
+  title: string;
+  value: number;
+}
+
+export const renderCart = (cartItems: CartType[]) => {
+  return cartItems.map((cartItem) => (
+    <DataTable.Row key={cartItem.productId}>
+      <DataTable.Cell textStyle={styles.cellText} style={{ flex: 3 }}>
+        {cartItem.name}
+      </DataTable.Cell>
+      <DataTable.Cell>x{cartItem.quantity}</DataTable.Cell>
+      <DataTable.Cell numeric>
+        {parseInt(cartItem.cost) * cartItem.quantity}
+      </DataTable.Cell>
+    </DataTable.Row>
+  ));
+};
+
+const renderOrderSummary = (orderSummaryItems: OrderSummaryItems[]) => {
+  return orderSummaryItems.map((item) => {
+    return (
+      <DataTable.Row key={item.title}>
+        <DataTable.Cell
+          textStyle={item.title == 'Total' ? styles.total : styles.cellText}
+        >
+          {item.title}
+        </DataTable.Cell>
+        <DataTable.Cell
+          textStyle={item.title == 'Total' ? styles.total : styles.cellText}
+          numeric
+        >
+          {currencyFormat(item.value)}
+        </DataTable.Cell>
+      </DataTable.Row>
+    );
+  });
+};
+
 const Cart = ({ navigation }) => {
   const cartItems = useSelector(selectCartItems);
   const order = useSelector(selectOrder);
   const dispatch = useDispatch();
-
-  const renderCart = () => {
-    return cartItems.map((cartItem) => (
-      <DataTable.Row key={cartItem.productId}>
-        <DataTable.Cell textStyle={styles.cellText} style={{ flex: 3 }}>
-          {cartItem.name}
-        </DataTable.Cell>
-        <DataTable.Cell>x{cartItem.quantity}</DataTable.Cell>
-        <DataTable.Cell numeric>{cartItem.cost}</DataTable.Cell>
-      </DataTable.Row>
-    ));
-  };
-
-  const renderSummary = () => {
-    const sumProductCost = order.products.reduce(
+  const sumProductCost = useMemo(() => {
+    return order.products.reduce(
       (acc, item) => parseInt(item.cost) * item.quantity + acc,
       0,
     );
-    const deliveryFee = 20000;
-    const total = sumProductCost + SERVICE_FEE + deliveryFee;
+  }, [order]);
 
-    return (
-      <>
-        <DataTable.Row>
-          <DataTable.Cell>Delivery</DataTable.Cell>
-          <DataTable.Cell numeric>{currencyFormat(deliveryFee)}</DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row>
-          <DataTable.Cell>Service Fee</DataTable.Cell>
-          <DataTable.Cell numeric>{currencyFormat(SERVICE_FEE)}</DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row>
-          <DataTable.Cell>Products</DataTable.Cell>
-          <DataTable.Cell numeric>
-            {currencyFormat(sumProductCost)}
-          </DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row>
-          <DataTable.Cell textStyle={styles.total}>Total</DataTable.Cell>
-          <DataTable.Cell textStyle={styles.total} numeric>
-            {currencyFormat(total)}
-          </DataTable.Cell>
-        </DataTable.Row>
-      </>
-    );
-  };
+  const orderSummaryItems = useMemo<OrderSummaryItems[]>(() => {
+    return [
+      {
+        title: 'Delivery',
+        value: 20000, // get this from server
+      },
+      {
+        title: 'Service charges',
+        value: SERVICE_FEE,
+      },
+      {
+        title: 'Products',
+        value: sumProductCost,
+      },
+      {
+        title: 'Total',
+        value: sumProductCost + SERVICE_FEE + 20000,
+      },
+    ];
+  }, [sumProductCost]);
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Your Order</Text>
       <View style={styles.orderList}>
-        <DataTable>{renderCart()}</DataTable>
+        <DataTable>{renderCart(cartItems)}</DataTable>
       </View>
 
       <View style={styles.deliverySummary}>
@@ -131,7 +151,7 @@ const Cart = ({ navigation }) => {
       <View style={styles.deliverySummary}>
         <Text style={styles.header}>Summary</Text>
         <View style={styles.orderList}>
-          <DataTable>{renderSummary()}</DataTable>
+          <DataTable>{renderOrderSummary(orderSummaryItems)}</DataTable>
         </View>
       </View>
 
@@ -181,7 +201,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   cellText: {
-    width: '100%',
+    fontWeight: 'normal',
   },
   deliveryCard: {
     marginBottom: 20,

@@ -7,7 +7,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { API_URL } from '../../utils/constants';
 
-interface Cart {
+export interface Cart {
   productId: string;
   name: string;
   cost: string;
