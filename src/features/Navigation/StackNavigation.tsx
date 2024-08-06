@@ -12,24 +12,29 @@ import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Cart from '../Orders/Cart';
 import ViewOrder from '../Orders/ViewOrder';
+import { useSelector } from 'react-redux';
+import { countCartItems } from '../Orders/orderSlice';
 
 const Stack = createStackNavigator();
 
 const StackNavigation = () => {
   const navigation = useNavigation();
+  const cartCounter = useSelector(countCartItems);
   const cartButton = {
     headerRight: () => (
       <View>
-        <Badge visible={true} style={styles.badge}>
-          3
-        </Badge>
+        {cartCounter > 0 && (
+          <Badge visible={true} style={styles.badge}>
+            {cartCounter}
+          </Badge>
+        )}
         <IconButton
           mode="outlined"
           icon="cart"
           iconColor={MD3Colors.secondary50}
           size={25}
           onPress={() => {
-            navigation.navigate('Cart');
+            cartCounter > 0 && navigation.navigate('Cart');
           }}
         />
       </View>
