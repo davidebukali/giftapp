@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import uuid from 'react-native-uuid';
 import {
+  DataTable,
   Button,
   Checkbox,
   Divider,
@@ -19,9 +20,23 @@ import {
 } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
+import { useSelector } from 'react-redux';
+import { Cart, selectCartItems } from './orderSlice';
 
-const { width } = Dimensions.get('window');
+export const renderOrderSummary = (orderSummaryItems: Cart[]) => {
+  return orderSummaryItems.map((summaryItem) => (
+    <DataTable.Row key={summaryItem.productId}>
+      <DataTable.Cell style={{ flex: 3 }}>{summaryItem.name}</DataTable.Cell>
+      <DataTable.Cell>x{summaryItem.quantity}</DataTable.Cell>
+      <DataTable.Cell numeric>
+        {parseInt(summaryItem.cost) * summaryItem.quantity}
+      </DataTable.Cell>
+    </DataTable.Row>
+  ));
+};
+
 const ViewOrder = ({ navigation }) => {
+  const cartItems = useSelector(selectCartItems);
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Order Confirmed</Text>
@@ -55,37 +70,11 @@ const ViewOrder = ({ navigation }) => {
       </View>
       <View style={styles.deliveryDetails}>
         <Text style={styles.header}>Summary</Text>
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryTextQty}>2x</Text>
-          <Text style={styles.summaryTextLeft}>Cake</Text>
-          <Text style={styles.summaryTextRight}>200,000/=</Text>
-        </View>
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryTextQty}>4x</Text>
-          <Text style={styles.summaryTextLeft}>Cadburys</Text>
-          <Text style={styles.summaryTextRight}>28,000/=</Text>
-        </View>
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryTextQty}>1x</Text>
-          <Text style={styles.summaryTextLeft}>Bouquet</Text>
-          <Text style={styles.summaryTextRight}>50,000/=</Text>
-        </View>
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryTextQty}></Text>
-          <Text style={styles.summaryTextLeft}>Service</Text>
-          <Text style={styles.summaryTextRight}>10,000/=</Text>
-        </View>
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryTextQty}></Text>
-          <Text style={styles.summaryTextLeft}>Delivery</Text>
-          <Text style={styles.summaryTextRight}>15,000/=</Text>
-        </View>
-        <View style={styles.summaryItem}>
-          <Text style={styles.summaryTextQty}></Text>
-          <Text style={styles.summaryTextLeft}>Total</Text>
-          <Text style={styles.summaryTextRight}>315,000/=</Text>
+        <View style={styles.orderSummary}>
+          <DataTable>{renderOrderSummary(cartItems)}</DataTable>
         </View>
       </View>
+
       <View style={styles.deliveryDetails}>
         <Text style={styles.helpheader}>Help</Text>
         <Text style={styles.helpsubheader}>
@@ -131,6 +120,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#ebebeb',
     margin: 10,
     paddingBottom: 10,
+  },
+  orderSummary: {
+    margin: 5,
   },
   summaryItem: {
     fontSize: 18,
