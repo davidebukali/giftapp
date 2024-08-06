@@ -89,6 +89,9 @@ export const {
 
 export const selectCartItems = (state: RootState) => state.orders.products;
 
+export const countCartItems = (state: RootState) =>
+  state.orders.products.length;
+
 export const selectOrder = (state: RootState) => state.orders;
 
 export default orderSlice.reducer;
