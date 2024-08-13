@@ -43,14 +43,12 @@
         {
           "id": "1",
           "name": "Eggless",
-          "price": 10000,
-          "status": true
+          "price": 10000
         },
         {
           "id": "2",
           "name": "Alternative sweetner/No sugar",
-          "price": 10000,
-          "status": false
+          "price": 10000
         }
       ]
     },
@@ -73,6 +71,45 @@
       "image": null,
       "description": "White gold available",
       "extras": []
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "userId": "2",
+      "vendorId": "3",
+      "orderDate": "2024-08-10T21:33:22.847+03:00",
+      "recipientName": "Moses",
+      "recipientContact": "0772001098",
+      "recipientAddress": "0.323434, 32.2123",
+      "deliveryCharges": "90000",
+      "totalProducts": "120000"
+    }
+  ],
+  "gift_item_orders": [
+    {
+      "id": 1,
+      "orderId": 1,
+      "productId": "1",
+      "productName": "Roses",
+      "productQuantity": "2",
+      "totalProductCost": "25000"
+    },
+    {
+      "id": 2,
+      "orderId": 1,
+      "productId": "2",
+      "productName": "Red velvet",
+      "productQuantity": "1",
+      "totalProductCost": "150000"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "eric",
+      "email": "eric@gmail.com",
+      "password": ""
     }
   ]
 }
