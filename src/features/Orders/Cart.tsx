@@ -70,11 +70,11 @@ const Cart = ({ navigation }) => {
   const order = useSelector(selectOrder);
   const dispatch = useDispatch();
   const sumProductCost = useMemo(() => {
-    return order.products.reduce(
+    return cartItems.reduce(
       (acc, item) => parseInt(item.cost) * item.quantity + acc,
       0,
     );
-  }, [order]);
+  }, [cartItems]);
 
   const orderSummaryItems = useMemo<OrderSummaryItems[]>(() => {
     return [
