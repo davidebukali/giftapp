@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -7,7 +7,8 @@ import {
   Text,
   View,
 } from 'react-native';
-import { IconButton, MD3Colors } from 'react-native-paper';
+import { Button, IconButton, MD3Colors } from 'react-native-paper';
+import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 import { selectGiftById, updateExtras } from './giftSlice';
 import {
@@ -19,7 +20,7 @@ import { useRoute } from '@react-navigation/native';
 import { RootState, useAppDispatch } from '../../app/store';
 import Extras from './Extras';
 
-const { width } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 const ViewGift = ({ navigation }) => {
   const { params } = useRoute();
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ const ViewGift = ({ navigation }) => {
     selectGiftById(state, params?.giftId),
   );
   const cartItems = useSelector(selectCartItems);
+  const [itemCount, setItemCount] = useState(0);
 
   const renderGiftQuantity = () => {
     const currentCartItem = cartItems.find(
@@ -44,8 +46,8 @@ const ViewGift = ({ navigation }) => {
   }
 
   return (
-    <View style={{ width: width }}>
-      <View style={[styles.container, { width: width }]}>
+    <View style={[styles.container]}>
+      <View style={styles.imageAndText}>
         <Pressable onPress={() => console.log('Pressed')}>
           <Image
             source={require('../../../assets/placeholder.png')}
@@ -68,31 +70,49 @@ const ViewGift = ({ navigation }) => {
           iconColor={MD3Colors.secondary50}
           size={40}
           onPress={() =>
-            dispatch(
-              removeFromCart({
-                productId: gift.id,
-              }),
-            )
+            // gift &&
+            // dispatch(
+            //   removeFromCart({
+            //     productId: gift.id,
+            //   }),
+            // )
+            {
+              if (itemCount > 0) {
+                setItemCount(itemCount - 1);
+              }
+            }
           }
         />
-        <Text style={styles.giftNumber}>{renderGiftQuantity()}</Text>
+        <Text style={styles.giftNumber}>{itemCount || '_'}</Text>
         <IconButton
           mode="contained"
           icon="plus"
           iconColor={MD3Colors.secondary50}
           size={40}
-          onPress={() =>
-            gift &&
-            dispatch(
-              addToCart({
-                productId: gift.id,
-                name: gift.name,
-                cost: gift.price,
-                quantity: 1,
-              }),
-            )
-          }
+          onPress={() => setItemCount(itemCount + 1)}
         />
+      </View>
+      <View style={styles.addButtonContainer}>
+        <Button
+          mode="contained"
+          style={styles.addButton}
+          onPress={() => {
+            if (itemCount > 0) {
+              gift &&
+                dispatch(
+                  addToCart({
+                    productId: gift.id,
+                    name: gift.name,
+                    cost: gift.price,
+                    quantity: itemCount,
+                  }),
+                );
+              navigation.goBack();
+            }
+          }}
+        >
+          {`Add ${itemCount || ''} to Cart`}
+        </Button>
       </View>
     </View>
   );
@@ -100,7 +120,13 @@ const ViewGift = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    flexDirection: 'column',
+    flex: 1,
+    padding: 5,
+    margin: 5,
+  },
+  imageAndText: {
+    height: 'auto',
     margin: 5,
   },
   defaultGalleryImage: {
@@ -124,6 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   addProduct: {
+    height: 'auto',
     marginTop: 50,
     flexDirection: 'row',
     marginLeft: 'auto',
@@ -133,6 +160,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     margin: 10,
     marginTop: 20,
+  },
+  addButtonContainer: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 10,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  addButton: {
+    width: '100%',
+    padding: 5,
   },
 });
 
