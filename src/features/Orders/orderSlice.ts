@@ -43,7 +43,7 @@ export const orderSlice = createSlice({
       );
 
       if (index >= 0) {
-        state.products[index].quantity = state.products[index].quantity + 1;
+        state.products[index].quantity = action.payload.quantity;
       } else {
         state.products.push(action.payload);
       }
