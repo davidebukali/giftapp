@@ -11,6 +11,7 @@ import { Badge, Button, IconButton, MD3Colors } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Cart from '../Orders/Cart';
+import Payments from '../Orders/Payments';
 import ViewOrder from '../Orders/ViewOrder';
 import { useSelector } from 'react-redux';
 import { countCartItems } from '../Orders/orderSlice';
@@ -62,6 +63,7 @@ const StackNavigation = () => {
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="ViewOrder" component={ViewOrder} />
       <Stack.Screen name="Address" component={OrderAddress} />
+      <Stack.Screen name="Payment" component={Payments} />
     </Stack.Navigator>
   );
 };
