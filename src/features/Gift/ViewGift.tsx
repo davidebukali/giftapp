@@ -69,19 +69,20 @@ const ViewGift = ({ navigation }) => {
           icon="minus"
           iconColor={MD3Colors.secondary50}
           size={40}
-          onPress={() =>
-            // gift &&
-            // dispatch(
-            //   removeFromCart({
-            //     productId: gift.id,
-            //   }),
-            // )
-            {
-              if (itemCount > 0) {
-                setItemCount(itemCount - 1);
-              }
+          onPress={() => {
+            if (itemCount > 0) {
+              setItemCount(itemCount - 1);
             }
-          }
+
+            if (itemCount == 1) {
+              gift &&
+                dispatch(
+                  removeFromCart({
+                    productId: gift.id,
+                  }),
+                );
+            }
+          }}
         />
         <Text style={styles.giftNumber}>{itemCount || '_'}</Text>
         <IconButton
