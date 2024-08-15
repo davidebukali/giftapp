@@ -2,15 +2,12 @@ import {
   View,
   Text,
   ImageBackground,
-  Image,
   TouchableOpacity,
   StyleSheet,
-  Switch,
 } from 'react-native';
 import {
   DrawerContentScrollView,
   DrawerItemList,
-  DrawerItem,
 } from '@react-navigation/drawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
