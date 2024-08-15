@@ -86,7 +86,7 @@
       "totalProducts": "120000"
     }
   ],
-  "gift_item_orders": [
+  "gift_order_items": [
     {
       "id": 1,
       "orderId": 1,
@@ -109,6 +109,7 @@
       "id": 1,
       "name": "eric",
       "email": "eric@gmail.com",
+      "phone": "1234",
       "password": ""
     }
   ]
