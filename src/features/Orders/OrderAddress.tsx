@@ -18,8 +18,9 @@ import { MapMarker } from 'expo-leaflet';
 import { Formik } from 'formik';
 import { ZOOM } from '../../utils/constants';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateDeliveryDetails } from './orderSlice';
+import { selectOrderAddress } from '../Orders/orderSlice';
 
 const mapLayers: Array<MapLayer> = [
   {
@@ -47,12 +48,26 @@ const AddressSchema = Yup.object().shape({
 });
 
 const OrderAddress = ({ navigation }) => {
+  const orderAddress = useSelector(selectOrderAddress);
   const [additionalInformation, setAdditionalInformation] = useState('');
   const [visible, setVisible] = useState(false);
-  const [mapMarkers, setMapMarkers] = useState<MapMarker[]>([]);
-  const [mapCenterPosition, setMapCenterPosition] = useState(initialPosition);
+  const [mapCenterPosition, setMapCenterPosition] = useState(
+    orderAddress || initialPosition,
+  );
   const [ownPosition, setOwnPosition] = useState<null | LatLngLiteral>(null);
   const dispatch = useDispatch();
+  const [mapMarkers, setMapMarkers] = useState<MapMarker[]>(
+    'lat' in orderAddress
+      ? [
+          {
+            id: '1',
+            position: orderAddress,
+            icon: '📍',
+            size: [36, 36],
+          },
+        ]
+      : [],
+  );
 
   useEffect(() => {
     const getLocationAsync = async () => {
