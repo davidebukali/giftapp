@@ -4,12 +4,13 @@ import RemindersList from '../Reminders/RemindersList';
 import OrderList from '../Orders/OrderList';
 import Profile from '../User/Profile';
 import Vendor from '../Vendors/Vendor';
+import CustomDrawer from './CustomDrawer';
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigation = () => {
   return (
-    <Drawer.Navigator>
+    <Drawer.Navigator drawerContent={(props) => <CustomDrawer {...props} />}>
       <Drawer.Screen name="Home" component={RemindersList} />
       <Drawer.Screen name="Gifts" component={Vendor} />
       <Drawer.Screen name="Orders" component={OrderList} />
