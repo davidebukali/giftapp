@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useEffect, useState } from 'react';
-import NoData from '../../components/NoData';
+import NoData from '../../components/NoData/NoData';
 import { API_URL } from '../../utils/constants';
 
 const { width } = Dimensions.get('window');

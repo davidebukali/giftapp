@@ -6,7 +6,7 @@ import { initProducts, selectAllGifts } from './giftSlice';
 import { useAppDispatch } from '../../app/store';
 import { useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import NoData from '../../components/NoData';
+import NoData from '../../components/NoData/NoData';
 
 const GiftList = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
