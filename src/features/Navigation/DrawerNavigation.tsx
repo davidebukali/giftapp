@@ -12,7 +12,13 @@ const DrawerNavigation = () => {
   return (
     <Drawer.Navigator drawerContent={(props) => <CustomDrawer {...props} />}>
       <Drawer.Screen name="Home" component={RemindersList} />
-      <Drawer.Screen name="Gifts" component={Vendor} />
+      <Drawer.Screen
+        name="Gifts"
+        component={Vendor}
+        options={{
+          headerTitle: 'Vendors',
+        }}
+      />
       <Drawer.Screen name="Orders" component={OrderList} />
       <Drawer.Screen name="Profile" component={Profile} />
     </Drawer.Navigator>

@@ -57,11 +57,23 @@ const StackNavigation = () => {
         component={Vendor}
         options={cartButton}
       />
-      <Stack.Screen name="GiftList" component={GiftList} options={cartButton} />
-      <Stack.Screen name="ViewGift" component={ViewGift} options={cartButton} />
+      <Stack.Screen
+        name="GiftList"
+        component={GiftList}
+        options={{ ...cartButton, headerTitle: 'Select Gift' }}
+      />
+      <Stack.Screen
+        name="ViewGift"
+        component={ViewGift}
+        options={{ ...cartButton, headerTitle: 'Gift Details' }}
+      />
 
       <Stack.Screen name="Cart" component={Cart} />
-      <Stack.Screen name="ViewOrder" component={ViewOrder} />
+      <Stack.Screen
+        name="ViewOrder"
+        component={ViewOrder}
+        options={{ headerTitle: 'Confirmed' }}
+      />
       <Stack.Screen name="Address" component={OrderAddress} />
       <Stack.Screen name="Payment" component={Payments} />
     </Stack.Navigator>
