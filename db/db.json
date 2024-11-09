@@ -12,12 +12,14 @@
     {
       "id": 1,
       "name": "Sweetly Defined",
-      "image": null
+      "image": null,
+      "hasCourier": true
     },
     {
       "id": 2,
       "name": "Floral Garage",
-      "image": null
+      "image": null,
+      "hasCourier": false
     }
   ],
   "gifts": [
