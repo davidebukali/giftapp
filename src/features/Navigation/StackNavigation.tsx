@@ -74,7 +74,7 @@ const StackNavigation = () => {
         component={ViewOrder}
         options={{ headerTitle: 'Confirmed' }}
       />
-      <Stack.Screen name="Address" component={OrderAddress} />
+      {/* <Stack.Screen name="Address" component={OrderAddress} /> */}
       <Stack.Screen name="Payment" component={Payments} />
     </Stack.Navigator>
   );
