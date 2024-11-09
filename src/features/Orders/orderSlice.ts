@@ -19,10 +19,7 @@ export interface OrderState {
   userId?: string;
   recipientNames: string;
   deliveryAdditionalInformation: string;
-  deliveryCoordinates: {
-    lat: string;
-    lng: string;
-  };
+  deliveryAddress: string;
   deliveryContact: string;
 }
 
@@ -33,7 +30,7 @@ export const orderSlice = createSlice({
     userId: '',
     recipientNames: '',
     deliveryAdditionalInformation: '',
-    deliveryCoordinates: '',
+    deliveryAddress: '',
     deliveryContact: '',
   },
   reducers: {
@@ -61,10 +58,12 @@ export const orderSlice = createSlice({
         }
       }
     },
-    updateDeliveryDetails(state, action) {
+    updateDeliveryAddress(state, action) {
+      state.deliveryAddress = action.payload.deliveryAddress;
+    },
+    updateDeliveryAdditionalInformation(state, action) {
       state.deliveryAdditionalInformation =
         action.payload.deliveryAdditionalInformation;
-      state.deliveryCoordinates = action.payload.deliveryCoordinates;
     },
     addRecipientNames(state, action) {
       console.log('Saving recipient names', action.payload);
@@ -84,7 +83,8 @@ export const {
   addRecipientNames,
   addToCart,
   removeFromCart,
-  updateDeliveryDetails,
+  updateDeliveryAddress,
+  updateDeliveryAdditionalInformation,
 } = orderSlice.actions;
 
 export const selectCartItems = (state: RootState) => state.orders.products;
@@ -94,6 +94,6 @@ export const countCartItems = (state: RootState) =>
 
 export const selectOrder = (state: RootState) => state.orders;
 export const selectOrderAddress = (state: RootState) =>
-  state.orders.deliveryCoordinates;
+  state.orders.deliveryAddress;
 
 export default orderSlice.reducer;

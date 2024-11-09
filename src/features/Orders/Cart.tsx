@@ -21,6 +21,8 @@ import {
   addRecipientNames,
   selectCartItems,
   selectOrder,
+  updateDeliveryAddress,
+  updateDeliveryAdditionalInformation,
 } from '../Orders/orderSlice';
 import { currencyFormat } from '../../utils/index';
 import { SERVICE_FEE } from '../../utils/constants';
@@ -107,7 +109,7 @@ const Cart = ({ navigation }) => {
       <View style={styles.deliverySummary}>
         <View style={styles.deliveryDetails}>
           <TextInput
-            label="Names of the recipient ?"
+            label="Names of recipient"
             value={order.recipientNames}
             onChangeText={(names) =>
               dispatch(
@@ -119,23 +121,54 @@ const Cart = ({ navigation }) => {
           />
         </View>
 
-        <View style={styles.deliveryCard}>
-          <Card onPress={() => navigation.navigate('Address')}>
-            <Card.Cover source={require('../../../assets/kampalamap.jpg')} />
-            <Card.Content>
-              <Text variant="bodyMedium" style={styles.deliveryAddress}>
-                {order.deliveryCoordinates
-                  ? 'Address saved'
-                  : 'Set a delivery address'}
-              </Text>
-            </Card.Content>
-          </Card>
+        <View style={styles.deliveryDetails}>
+          <TextInput
+            label="Recipient Address"
+            value={order.deliveryAddress}
+            onChangeText={(address) => {
+              dispatch(
+                updateDeliveryAddress({
+                  deliveryAddress: address,
+                }),
+              );
+            }}
+          />
+        </View>
+
+        <View style={styles.deliveryDetails}>
+          <TextInput
+            numberOfLines={10}
+            label="Additional Details"
+            value={order.deliveryAdditionalInformation}
+            onChangeText={(info) =>
+              dispatch(
+                updateDeliveryAdditionalInformation({
+                  deliveryAdditionalInformation: info,
+                }),
+              )
+            }
+          />
         </View>
 
         <View style={styles.deliveryDetails}>
           <TextInput
             keyboardType="numeric"
-            label="Phone number of the gift recipient"
+            label="Recipient phone number"
+            value={order.deliveryContact}
+            onChangeText={(contact) =>
+              dispatch(
+                addRecipientContact({
+                  contact,
+                }),
+              )
+            }
+          />
+        </View>
+
+        <View style={styles.deliveryDetails}>
+          <TextInput
+            keyboardType="numeric"
+            label="Your boda/courier phone number"
             value={order.deliveryContact}
             onChangeText={(contact) =>
               dispatch(
