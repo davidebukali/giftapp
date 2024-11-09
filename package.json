@@ -24,7 +24,6 @@
     "expo-asset": "~10.0.9",
     "expo-file-system": "~17.0.1",
     "expo-image-picker": "~15.0.4",
-    "expo-leaflet": "^1.0.3",
     "expo-location": "~17.0.1",
     "expo-media-library": "~16.0.3",
     "expo-notifications": "~0.28.8",
@@ -64,7 +63,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.34.1",
     "globals": "^15.0.0",
-    "json-server": "^1.0.0-beta.0",
+    "json-server": "^1.0.0-beta.3",
     "prettier": "3.2.5",
     "typescript": "~5.3.3",
     "typescript-eslint": "^7.6.0"
