@@ -1,24 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { DataTable } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
-import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import { useSelector } from 'react-redux';
-import { Cart, selectCartItems } from './orderSlice';
+import { selectCartItems } from './orderSlice';
 import PayWithFlutterwave from 'flutterwave-react-native';
 import { SERVICE_FEE } from '../../utils/constants';
-// or import PayWithFlutterwave from 'flutterwave-react-native';
 
 interface RedirectParams {
   status: 'successful' | 'cancelled';
   transaction_id?: string;
   tx_ref: string;
 }
-
-/* An example function called when transaction is completed successfully or canceled */
-const handleOnRedirect = (data: RedirectParams) => {
-  console.log(data);
-};
 
 /* An example function to generate a random transaction reference */
 const generateTransactionRef = (length: number) => {
@@ -34,22 +25,34 @@ const generateTransactionRef = (length: number) => {
 
 const Payments = ({ navigation }) => {
   const cartItems = useSelector(selectCartItems);
+
+  /* A function called when transaction is completed successfully or canceled */
+  const handleOnRedirect = (data: RedirectParams) => {
+    console.log('handleOnRedirect', data);
+    // {"status": "successful", "transaction_id": "1625462816", "tx_ref": "flw_tx_ref_H7rOiC6XVb"}
+    if (data.status == 'successful') {
+      navigation.navigate('ViewOrder');
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Service Charges</Text>
-      <Text style={styles.subheader}>{SERVICE_FEE}/=</Text>
+      <View style={[styles.paymentTitle]}>
+        <Text style={styles.header}>Service Charges</Text>
+        <Text style={styles.subheader}>- {SERVICE_FEE}/=</Text>
+      </View>
       <View style={[styles.paymentButton, { flex: 1 }]}>
         <PayWithFlutterwave
           onRedirect={handleOnRedirect}
           options={{
             tx_ref: generateTransactionRef(10),
-            authorization: '[00209010]',
+            authorization: 'FLWPUBK-2172aa7b5a4d9a5093b5db567c5f2c48-X',
             customer: {
               email: 'mail@example.com',
             },
             amount: 2000,
-            currency: 'NGN',
-            payment_options: 'card',
+            currency: 'UGX',
+            payment_options: 'card, mobilemoneyuganda',
           }}
         />
       </View>
@@ -76,6 +79,10 @@ const styles = StyleSheet.create({
   container: {
     margin: 5,
   },
+  paymentTitle: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
   header: {
     fontWeight: 'bold',
     fontSize: 25,
@@ -83,10 +90,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   subheader: {
-    fontSize: 18,
-    margin: 10,
+    fontSize: 25,
+    marginBottom: 10,
+    marginTop: 10,
     textAlign: 'center',
-    marginBottom: 20,
   },
   paymentButton: {
     margin: 10,

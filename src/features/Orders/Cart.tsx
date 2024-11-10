@@ -193,7 +193,7 @@ const Cart = ({ navigation }) => {
           mode="contained"
           style={styles.buyGift}
           onPress={() => {
-            navigation.navigate('ViewOrder');
+            navigation.navigate('Payment');
           }}
         >
           Order
