@@ -10,8 +10,11 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo';
 
 const CustomDrawer = (props) => {
+  const { user } = useUser();
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView
@@ -26,17 +29,19 @@ const CustomDrawer = (props) => {
           source={require('../../../assets/purplemenu.jpg')}
           style={{ padding: 20, paddingBottom: 150 }}
         >
-          <Text
-            style={{
-              color: '#fff',
-              fontSize: 18,
-              margin: 10,
-              position: 'absolute',
-              bottom: 0,
-            }}
-          >
-            Name
-          </Text>
+          {user && (
+            <Text
+              style={{
+                color: '#fff',
+                fontSize: 18,
+                margin: 10,
+                position: 'absolute',
+                bottom: 0,
+              }}
+            >
+              Hello {user.emailAddresses[0].emailAddress}
+            </Text>
+          )}
         </ImageBackground>
         <View style={{ flex: 1, backgroundColor: '#fff', paddingTop: 10 }}>
           <DrawerItemList {...props} />
@@ -63,20 +68,38 @@ const CustomDrawer = (props) => {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={{ paddingVertical: 15 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Ionicons name="exit-outline" size={22} />
-            <Text
-              style={{
-                fontSize: 15,
+        <SignedOut>
+          <TouchableOpacity style={{ paddingVertical: 15 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name="exit-outline" size={22} />
+              <Text
+                style={{
+                  fontSize: 15,
 
-                marginLeft: 5,
-              }}
-            >
-              Sign Out
-            </Text>
-          </View>
-        </TouchableOpacity>
+                  marginLeft: 5,
+                }}
+              >
+                Sign In Here
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </SignedOut>
+        <SignedIn>
+          <TouchableOpacity style={{ paddingVertical: 15 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name="exit-outline" size={22} />
+              <Text
+                style={{
+                  fontSize: 15,
+
+                  marginLeft: 5,
+                }}
+              >
+                Sign Out
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </SignedIn>
       </View>
     </View>
   );
